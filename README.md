@@ -342,6 +342,16 @@ The gallery compares the source figures extracted from the Huang et al. (2013) p
 
 Detailed numerical notes and limitations are recorded in `docs/gallery/huang2013/RESULTS.md`. These figures are imported historical reproduction evidence; they are not yet represented as a canonical PaperSim `iterNNN` case.
 
+
+## Gallery: Kobayashi 1993 Figure 7
+
+This composite compares the source-paper morphology panels with the legacy PaperSim COMSOL reproduction for the anisotropy sweep in Figure 7. It is retained as historical reproduction evidence for the first MVP case.
+
+<p align="center">
+  <a href="docs/gallery/kobayashi1993/fig7_paper_vs_comsol.png"><img src="docs/gallery/kobayashi1993/fig7_paper_vs_comsol.png" alt="Kobayashi 1993 Figure 7 paper versus COMSOL comparison" width="900"></a>
+</p>
+<p align="center"><sub>Paper Figure 7 versus legacy PaperSim/COMSOL reproduction</sub></p>
+
 ## Contributing
 
 开发规范、独立测试要求和提交前检查见 [CONTRIBUTING.md](CONTRIBUTING.md)。安全问题请按 [SECURITY.md](SECURITY.md) 报告。
