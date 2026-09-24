@@ -313,6 +313,35 @@ python3 -m pytest -m comsol
 
 `PaperSim` 不在仓库内保存主机名、账号、密码、私钥、实例 ID、分区或远端绝对路径。这些信息必须通过外部 mode-`0600` 配置文件注入。`.gitignore` 会排除本地虚拟环境、构建产物、MPH、日志、CSV、密钥和凭据文件。
 
+
+## Gallery: Huang 2013 Figure Reproduction
+
+The gallery compares the source figures extracted from the Huang et al. (2013) paper with the corrected PaperEngine reproduction results. Figure 2 uses the corrected concentration direction; Figure 4(c) uses `front=0.70` to preserve the yield plateau; Figure 5 uses the unidirectional swelling branch `beta_r=1, beta_theta=0`.
+
+<table>
+  <thead>
+    <tr>
+      <th align="center">Figure 2: two-phase concentration and stress</th>
+      <th align="center">Figure 4: single-phase stress</th>
+      <th align="center">Figure 5: unidirectional lithiation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center" width="33%"><a href="docs/gallery/huang2013/figure2_original.png"><img src="docs/gallery/huang2013/figure2_original.png" alt="Huang 2013 original Figure 2" width="100%"></a><br><sub>Original Figure 2</sub></td>
+      <td align="center" width="33%"><a href="docs/gallery/huang2013/figure4_original.png"><img src="docs/gallery/huang2013/figure4_original.png" alt="Huang 2013 original Figure 4" width="100%"></a><br><sub>Original Figure 4</sub></td>
+      <td align="center" width="33%"><a href="docs/gallery/huang2013/figure5_original.png"><img src="docs/gallery/huang2013/figure5_original.png" alt="Huang 2013 original Figure 5" width="100%"></a><br><sub>Original Figure 5</sub></td>
+    </tr>
+    <tr>
+      <td align="center" width="33%"><a href="docs/gallery/huang2013/figure2_reproduction.png"><img src="docs/gallery/huang2013/figure2_reproduction.png" alt="PaperEngine reproduction of Huang 2013 Figure 2" width="100%"></a><br><sub>Reproduction Figure 2</sub></td>
+      <td align="center" width="33%"><a href="docs/gallery/huang2013/figure4_reproduction.png"><img src="docs/gallery/huang2013/figure4_reproduction.png" alt="PaperEngine reproduction of Huang 2013 Figure 4" width="100%"></a><br><sub>Reproduction Figure 4</sub></td>
+      <td align="center" width="33%"><a href="docs/gallery/huang2013/figure5_reproduction.png"><img src="docs/gallery/huang2013/figure5_reproduction.png" alt="PaperEngine reproduction of Huang 2013 Figure 5" width="100%"></a><br><sub>Reproduction Figure 5</sub></td>
+    </tr>
+  </tbody>
+</table>
+
+Detailed numerical notes and limitations are recorded in `docs/gallery/huang2013/RESULTS.md`. These figures are imported historical reproduction evidence; they are not yet represented as a canonical PaperSim `iterNNN` case.
+
 ## Contributing
 
 开发规范、独立测试要求和提交前检查见 [CONTRIBUTING.md](CONTRIBUTING.md)。安全问题请按 [SECURITY.md](SECURITY.md) 报告。
