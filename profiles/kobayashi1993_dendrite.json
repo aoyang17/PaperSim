@@ -1,0 +1,1085 @@
+{
+  "acceptance": [
+    {
+      "expected": 1000000,
+      "id": "authoritative_mph_present",
+      "metric": "artifacts.final_mph_bytes",
+      "operator": ">",
+      "required": true
+    },
+    {
+      "expected": 0,
+      "id": "comsol_logs_clean",
+      "metric": "quality.comsol_error_count",
+      "operator": "==",
+      "required": true
+    },
+    {
+      "expected": -0.05,
+      "id": "phase_lower_bound",
+      "metric": "quality.p_min",
+      "operator": ">=",
+      "required": true
+    },
+    {
+      "expected": 1.05,
+      "id": "phase_upper_bound",
+      "metric": "quality.p_max",
+      "operator": "<=",
+      "required": true
+    },
+    {
+      "expected": 0.01,
+      "id": "enthalpy_conservation",
+      "metric": "quality.max_relative_enthalpy_drift",
+      "operator": "<=",
+      "required": true
+    },
+    {
+      "expected": 0.05,
+      "id": "mesh_tip_convergence",
+      "metric": "convergence.mesh_tip_relative_difference",
+      "operator": "<=",
+      "required": true
+    },
+    {
+      "expected": 0.05,
+      "id": "timestep_tip_convergence",
+      "metric": "convergence.timestep_tip_relative_difference",
+      "operator": "<=",
+      "required": true
+    },
+    {
+      "expected": 0.15,
+      "id": "seed_tip_robustness",
+      "metric": "convergence.seed_tip_relative_range",
+      "operator": "<=",
+      "required": true
+    },
+    {
+      "expected": 1.02,
+      "id": "anisotropy_increases_tip_growth",
+      "metric": "paper_trend.delta050_to_delta000_tip_ratio",
+      "operator": ">",
+      "required": true
+    },
+    {
+      "expected": 1.1,
+      "id": "fourfold_directionality",
+      "metric": "paper_trend.delta050_vertical_to_horizontal_extent_ratio",
+      "operator": ">",
+      "required": true
+    },
+    {
+      "expected": 0.25,
+      "id": "fig7_silhouette_overlap",
+      "metric": "paper_figure.fig7_mean_iou",
+      "operator": ">=",
+      "required": true
+    },
+    {
+      "expected": 0.1,
+      "id": "fig7_contour_distance",
+      "metric": "paper_figure.fig7_normalized_chamfer",
+      "operator": "<=",
+      "required": true
+    }
+  ],
+  "assumptions": [
+    "The paper does not report a random seed, so a fixed deterministic hash-noise sequence is used.",
+    "The paper does not report the nucleation seed radius; R0=0.15 m is used and explicitly audited.",
+    "Dimensionless spatial coordinates are represented in metres and dimensionless time in seconds for COMSOL bookkeeping."
+  ],
+  "boundary_conditions": [
+    {
+      "condition": "zero general flux on exterior boundaries",
+      "evidence_ids": [
+        "eq3"
+      ],
+      "expression": "0",
+      "id": "bc_p_zero_flux",
+      "selection": "all exterior boundaries",
+      "source": "paper",
+      "variable": "p"
+    },
+    {
+      "condition": "adiabatic zero heat flux on exterior boundaries",
+      "evidence_ids": [
+        "figure7"
+      ],
+      "expression": "0",
+      "id": "bc_T_adiabatic",
+      "selection": "all exterior boundaries",
+      "source": "paper",
+      "variable": "T"
+    }
+  ],
+  "case_id": "kobayashi1993_dendrite",
+  "comsol_templates": {
+    "build": "profiles/templates/kobayashi1993_dendrite_build.java",
+    "solve": "profiles/templates/kobayashi1993_dendrite_solve.java"
+  },
+  "dependent_variables": [
+    "p",
+    "T"
+  ],
+  "equations": [
+    {
+      "canonical": "tau*d(p,t)-div(GammaP)-phaseSource=0",
+      "classification": "control",
+      "comsol_features": [
+        "gp"
+      ],
+      "dependent_variables": [
+        "p"
+      ],
+      "evidence_ids": [
+        "eq3"
+      ],
+      "id": "eq3",
+      "latex": "\\tau\\,\\partial p/\\partial t=\\nabla\\cdot\\Gamma+p(1-p)(p-1/2+m)",
+      "number": 3,
+      "referenced_symbols": [
+        "tau",
+        "p",
+        "GammaPx",
+        "GammaPy",
+        "mT",
+        "phaseSource"
+      ]
+    },
+    {
+      "canonical": "mT-alpha/pi*atan(gamma*(Teq-T))=0",
+      "classification": "constitutive",
+      "comsol_features": [],
+      "dependent_variables": [],
+      "evidence_ids": [
+        "eq4m"
+      ],
+      "id": "eq4m",
+      "latex": "m(T)=\\alpha/\\pi\\,\\mathrm{atan}[\\gamma(T_{\\mathrm{eq}}-T)]",
+      "number": 4,
+      "referenced_symbols": [
+        "mT",
+        "alpha",
+        "gamma",
+        "Teq",
+        "T"
+      ]
+    },
+    {
+      "canonical": "epsilon-epsbar*(1+delta*cos(jmode*(theta-theta0)))=0",
+      "classification": "constitutive",
+      "comsol_features": [],
+      "dependent_variables": [],
+      "evidence_ids": [
+        "eq4sigma"
+      ],
+      "id": "eq4sigma",
+      "latex": "\\sigma(\\theta)=1+\\delta\\cos[j(\\theta-\\theta_0)]",
+      "number": 4,
+      "referenced_symbols": [
+        "epsilon",
+        "epsbar",
+        "delta",
+        "jmode",
+        "theta",
+        "theta0"
+      ]
+    },
+    {
+      "canonical": "d(T,t)-div(heatFlux)-latentSource=0",
+      "classification": "control",
+      "comsol_features": [
+        "gT"
+      ],
+      "dependent_variables": [
+        "T"
+      ],
+      "evidence_ids": [
+        "eq5"
+      ],
+      "id": "eq5",
+      "latex": "\\partial T/\\partial t=\\nabla^2T+K\\,\\partial p/\\partial t",
+      "number": 5,
+      "referenced_symbols": [
+        "T",
+        "D",
+        "latentSource",
+        "Klatent",
+        "p"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "eq3",
+      "label": "Eq. (3) phase-field balance",
+      "page": 3,
+      "quote": "+V.(eZVp) +p(a-p)(p-  ½ + m),"
+    },
+    {
+      "id": "eq4m",
+      "label": "driving-force constitutive relation",
+      "page": 3,
+      "quote": "m(~)=(a/~r)tan-l[y(Te - T)]"
+    },
+    {
+      "id": "eq4sigma",
+      "label": "anisotropy constitutive relation",
+      "page": 3,
+      "quote": "O'(0) = 1 + 3 COS[j(0 -- 00) ] ."
+    },
+    {
+      "id": "eq5",
+      "label": "Eq. (5) enthalpy balance",
+      "page": 4,
+      "quote": "0___T = V2 T + K 0_._pp."
+    },
+    {
+      "id": "fixed_parameters",
+      "label": "fixed dimensionless parameters",
+      "page": 4,
+      "quote": "~=0.01, ~- = 0.0003, a = 0.9, 3, = 10.0 and a = 0.01."
+    },
+    {
+      "id": "domain_mesh",
+      "label": "square domain size and mesh description",
+      "page": 4,
+      "quote": "the domain size is 9.0 x 9.0"
+    },
+    {
+      "id": "mesh_numbers",
+      "label": "square mesh numbers",
+      "page": 4,
+      "quote": "mesh numbers are 300 x 300"
+    },
+    {
+      "id": "time_step",
+      "label": "paper time step",
+      "page": 4,
+      "quote": "Time mesh size is taken to be 0.0002."
+    },
+    {
+      "id": "figure7",
+      "label": "Fig. 7 caption and scan intent",
+      "page": 8,
+      "quote": "Fig. 7. After nucleation, crystal grows toward supercooled melt under adiabatic condition for various values of 6."
+    },
+    {
+      "id": "figure7_k",
+      "label": "latent heat used by Fig. 7",
+      "page": 8,
+      "quote": "K = 2.0."
+    },
+    {
+      "id": "nucleation",
+      "label": "Fig. 7 initial condition location",
+      "page": 7,
+      "quote": "Nucleation occurs at the center of the bottom edge"
+    }
+  ],
+  "first_author_surname": "Kobayashi",
+  "geometry": [
+    {
+      "description": "9 by 9 square domain",
+      "dimension": 2,
+      "evidence_ids": [
+        "domain_mesh"
+      ],
+      "id": "geom_square",
+      "parameters": [
+        "L"
+      ],
+      "source": "paper"
+    }
+  ],
+  "initial_conditions": [
+    {
+      "evidence_ids": [
+        "nucleation"
+      ],
+      "expression": "phaseInitial",
+      "id": "ic_p_seed",
+      "source": "assumption",
+      "variable": "p"
+    },
+    {
+      "evidence_ids": [
+        "figure7"
+      ],
+      "expression": "temperatureInitial",
+      "id": "ic_T_uniform",
+      "source": "paper",
+      "variable": "T"
+    }
+  ],
+  "mesh": {
+    "description": "mapped 300 by 300 square mesh baseline",
+    "evidence_ids": [
+      "mesh_numbers"
+    ],
+    "id": "mesh1",
+    "settings": {
+      "elements_per_axis": 300,
+      "hmax": "hmesh",
+      "hmin": "hmesh"
+    },
+    "source": "numerics"
+  },
+  "observations": [
+    {
+      "condition": "delta 0.05 compared with delta 0",
+      "evidence_ids": [
+        "figure7"
+      ],
+      "id": "fig7_anisotropy_trend",
+      "quantity": "tip growth increases with anisotropy",
+      "source": "Fig. 7",
+      "units": "1",
+      "value": 1
+    },
+    {
+      "condition": "delta 0.05 at final time",
+      "evidence_ids": [
+        "figure7"
+      ],
+      "id": "fig7_fourfold_shape",
+      "quantity": "fourfold directionality",
+      "source": "Fig. 7",
+      "units": "1",
+      "value": 1
+    }
+  ],
+  "open_gaps": [],
+  "outputs": [
+    {
+      "condition": "final artifact",
+      "evidence_ids": [],
+      "expression": "file_size",
+      "id": "artifacts.final_mph_bytes",
+      "name": "authoritative MPH size",
+      "source": "reproduced_observation",
+      "units": "byte"
+    },
+    {
+      "condition": "solve log",
+      "evidence_ids": [],
+      "expression": "log_error_count",
+      "id": "quality.comsol_error_count",
+      "name": "COMSOL fatal-error count",
+      "source": "reproduced_observation",
+      "units": "1"
+    },
+    {
+      "condition": "all delta and time samples",
+      "evidence_ids": [],
+      "expression": "min(pMin)",
+      "id": "quality.p_min",
+      "name": "minimum phase field",
+      "source": "reproduced_observation",
+      "units": "1"
+    },
+    {
+      "condition": "all delta and time samples",
+      "evidence_ids": [],
+      "expression": "max(pMax)",
+      "id": "quality.p_max",
+      "name": "maximum phase field",
+      "source": "reproduced_observation",
+      "units": "1"
+    },
+    {
+      "condition": "all delta samples",
+      "evidence_ids": [],
+      "expression": "max(abs(enthalpyInvariant-enthalpyInvariant(t=0))/max(abs(enthalpyInvariant(t=0)),1e-30))",
+      "id": "quality.max_relative_enthalpy_drift",
+      "name": "maximum relative enthalpy drift",
+      "source": "reproduced_observation",
+      "units": "1"
+    },
+    {
+      "condition": "delta=0.02, final time",
+      "evidence_ids": [],
+      "expression": "abs(tipY_fine-tipY_base)/abs(tipY_base)",
+      "id": "convergence.mesh_tip_relative_difference",
+      "name": "tip difference between baseline and fine mesh",
+      "source": "reproduced_observation",
+      "units": "1"
+    },
+    {
+      "condition": "delta=0.02, final time",
+      "evidence_ids": [],
+      "expression": "abs(tipY_dt_fine-tipY_base)/abs(tipY_base)",
+      "id": "convergence.timestep_tip_relative_difference",
+      "name": "tip difference between baseline and fine time step",
+      "source": "reproduced_observation",
+      "units": "1"
+    },
+    {
+      "condition": "delta=0.02, final time",
+      "evidence_ids": [],
+      "expression": "(max(tipY_seeds)-min(tipY_seeds))/max(abs(mean(tipY_seeds)),1e-30)",
+      "id": "convergence.seed_tip_relative_range",
+      "name": "tip range across seed perturbations",
+      "source": "reproduced_observation",
+      "units": "1"
+    },
+    {
+      "condition": "Fig. 7 final time",
+      "evidence_ids": [
+        "figure7"
+      ],
+      "expression": "tipY(delta=.05,t=1.4)/tipY(delta=0,t=1.4)",
+      "id": "paper_trend.delta050_to_delta000_tip_ratio",
+      "name": "final tip ratio delta=0.05 to delta=0",
+      "source": "reproduced_observation",
+      "units": "1"
+    },
+    {
+      "condition": "Fig. 7 final time",
+      "evidence_ids": [
+        "figure7"
+      ],
+      "expression": "tipY(delta=.05,t=1.4)/halfWidth(delta=.05,t=1.4)",
+      "id": "paper_trend.delta050_vertical_to_horizontal_extent_ratio",
+      "name": "vertical/horizontal extent ratio at delta=0.05",
+      "source": "reproduced_observation",
+      "units": "1"
+    },
+    {
+      "condition": "times 0.2,0.8,1.4 and all delta values",
+      "evidence_ids": [
+        "figure7"
+      ],
+      "expression": "computed from exported p contour masks",
+      "id": "paper_figure.fig7_mean_iou",
+      "name": "mean IoU against digitized Fig. 7 masks",
+      "source": "reproduced_observation",
+      "units": "1"
+    },
+    {
+      "condition": "times 0.2,0.8,1.4 and all delta values",
+      "evidence_ids": [
+        "figure7"
+      ],
+      "expression": "computed from exported p contour masks",
+      "id": "paper_figure.fig7_normalized_chamfer",
+      "name": "mean normalized contour distance against Fig. 7",
+      "source": "reproduced_observation",
+      "units": "1"
+    }
+  ],
+  "paper_title": "Modeling and numerical simulations of dendritic crystal growth",
+  "parameters": [
+    {
+      "assumptions": [],
+      "comsol_name": "L",
+      "evidence_ids": [
+        "domain_mesh"
+      ],
+      "id": "L",
+      "meaning": "square domain side",
+      "source": "paper",
+      "symbol": "L",
+      "units": "m",
+      "value": 9
+    },
+    {
+      "assumptions": [],
+      "comsol_name": "epsbar",
+      "evidence_ids": [
+        "fixed_parameters"
+      ],
+      "id": "epsbar",
+      "meaning": "mean interface width",
+      "source": "paper",
+      "symbol": "epsilon_bar",
+      "units": "m",
+      "value": 0.01
+    },
+    {
+      "assumptions": [],
+      "comsol_name": "tau",
+      "evidence_ids": [
+        "fixed_parameters"
+      ],
+      "id": "tau",
+      "meaning": "phase relaxation time",
+      "source": "paper",
+      "symbol": "tau",
+      "units": "s",
+      "value": 0.0003
+    },
+    {
+      "assumptions": [],
+      "comsol_name": "alpha",
+      "evidence_ids": [
+        "fixed_parameters"
+      ],
+      "id": "alpha",
+      "meaning": "liquidus slope near equilibrium",
+      "source": "paper",
+      "symbol": "alpha",
+      "units": "1",
+      "value": 0.9
+    },
+    {
+      "assumptions": [],
+      "comsol_name": "gamma",
+      "evidence_ids": [
+        "fixed_parameters"
+      ],
+      "id": "gamma",
+      "meaning": "inverse supercooling scale",
+      "source": "paper",
+      "symbol": "gamma",
+      "units": "1",
+      "value": 10.0
+    },
+    {
+      "assumptions": [],
+      "comsol_name": "Teq",
+      "evidence_ids": [
+        "fixed_parameters"
+      ],
+      "id": "Teq",
+      "meaning": "equilibrium temperature",
+      "source": "paper",
+      "symbol": "T_eq",
+      "units": "1",
+      "value": 1.0
+    },
+    {
+      "assumptions": [],
+      "comsol_name": "jmode",
+      "evidence_ids": [
+        "eq4sigma"
+      ],
+      "id": "jmode",
+      "meaning": "fourfold anisotropy mode",
+      "source": "paper",
+      "symbol": "j",
+      "units": "1",
+      "value": 4
+    },
+    {
+      "assumptions": [],
+      "comsol_name": "delta",
+      "evidence_ids": [
+        "figure7"
+      ],
+      "id": "delta",
+      "meaning": "anisotropy strength swept in Fig. 7",
+      "source": "paper",
+      "symbol": "delta",
+      "units": "1",
+      "value": 0.02
+    },
+    {
+      "assumptions": [],
+      "comsol_name": "theta0",
+      "evidence_ids": [
+        "eq4sigma"
+      ],
+      "id": "theta0",
+      "meaning": "anisotropy axis",
+      "source": "paper",
+      "symbol": "theta_0",
+      "units": "rad",
+      "value": 0
+    },
+    {
+      "assumptions": [],
+      "comsol_name": "Klatent",
+      "evidence_ids": [
+        "figure7_k"
+      ],
+      "id": "Klatent",
+      "meaning": "dimensionless latent heat for Fig. 7",
+      "source": "paper",
+      "symbol": "K",
+      "units": "1",
+      "value": 2.0
+    },
+    {
+      "assumptions": [],
+      "comsol_name": "D",
+      "evidence_ids": [
+        "eq5"
+      ],
+      "id": "D",
+      "meaning": "dimensionless thermal diffusivity set to unity",
+      "source": "paper",
+      "symbol": "D",
+      "units": "1",
+      "value": 1.0
+    },
+    {
+      "assumptions": [],
+      "comsol_name": "noiseAmp",
+      "evidence_ids": [
+        "fixed_parameters"
+      ],
+      "id": "noiseAmp",
+      "meaning": "uniform noise amplitude",
+      "source": "paper",
+      "symbol": "a",
+      "units": "1",
+      "value": 0.01
+    },
+    {
+      "assumptions": [
+        "paper gives no random seed; fixed seed is a declared reproduction assumption"
+      ],
+      "comsol_name": "noiseSeed",
+      "evidence_ids": [],
+      "id": "noiseSeed",
+      "meaning": "fixed random-sequence seed",
+      "source": "assumption",
+      "symbol": "s",
+      "units": "1",
+      "value": 1993
+    },
+    {
+      "assumptions": [
+        "paper gives no RNG discretization; value follows the 9.0/300 mesh spacing"
+      ],
+      "comsol_name": "hnoise",
+      "evidence_ids": [],
+      "id": "hnoise",
+      "meaning": "noise correlation cell",
+      "source": "assumption",
+      "symbol": "h_chi",
+      "units": "m",
+      "value": 0.03
+    },
+    {
+      "assumptions": [
+        "paper time step is reused for the deterministic hash noise"
+      ],
+      "comsol_name": "dtnoise",
+      "evidence_ids": [],
+      "id": "dtnoise",
+      "meaning": "noise update cadence",
+      "source": "assumption",
+      "symbol": "Delta t_chi",
+      "units": "s",
+      "value": 0.0002
+    },
+    {
+      "assumptions": [
+        "paper fixes nucleation at the bottom edge but does not report a seed radius"
+      ],
+      "comsol_name": "R0",
+      "evidence_ids": [],
+      "id": "R0",
+      "meaning": "initial circular seed radius",
+      "source": "assumption",
+      "symbol": "R_0",
+      "units": "m",
+      "value": 0.15
+    },
+    {
+      "assumptions": [],
+      "comsol_name": "hmesh",
+      "evidence_ids": [
+        "mesh_numbers"
+      ],
+      "id": "hmesh",
+      "meaning": "mapped mesh element size",
+      "source": "numerics",
+      "symbol": "h",
+      "units": "m",
+      "value": 0.03
+    },
+    {
+      "assumptions": [],
+      "comsol_name": "maxStep",
+      "evidence_ids": [
+        "time_step"
+      ],
+      "id": "maxStep",
+      "meaning": "maximum BDF time step",
+      "source": "paper",
+      "symbol": "Delta t",
+      "units": "s",
+      "value": 0.0002
+    },
+    {
+      "assumptions": [],
+      "comsol_name": "dtout",
+      "evidence_ids": [],
+      "id": "dtout",
+      "meaning": "stored output interval",
+      "source": "numerics",
+      "symbol": "Delta t_out",
+      "units": "s",
+      "value": 0.01
+    },
+    {
+      "assumptions": [],
+      "comsol_name": "tfinal",
+      "evidence_ids": [
+        "figure7"
+      ],
+      "id": "tfinal",
+      "meaning": "Fig. 7 requested final time",
+      "source": "paper",
+      "symbol": "t_f",
+      "units": "s",
+      "value": 1.4
+    }
+  ],
+  "schema_version": "papersim.profile.v1",
+  "scope": "Reproduce Eqs. (3)-(5) and the delta sweep in Fig. 7 under the declared assumptions.",
+  "solver": {
+    "backend": "comsol",
+    "evidence_ids": [
+      "figure7",
+      "time_step"
+    ],
+    "id": "solver1",
+    "settings": {
+      "bdf_order": 2,
+      "comparison_times": [
+        0.2,
+        0.8,
+        1.4
+      ],
+      "delta_values": [
+        0,
+        0.005,
+        0.01,
+        0.02,
+        0.05
+      ],
+      "dtout": 0.01,
+      "max_step": 0.0002,
+      "rtol": 0.001,
+      "study": "std1",
+      "sweep_parameter": "delta",
+      "tfinal": 1.4
+    },
+    "source": "numerics",
+    "version": "6.4"
+  },
+  "topic": "dendrite",
+  "variables": [
+    {
+      "comsol_name": "xCenter",
+      "description": "x coordinate of the square-domain centre",
+      "evidence_ids": [],
+      "expression": "L/2",
+      "group": "v_geometry",
+      "id": "xCenter",
+      "source": "auxiliary",
+      "symbol": "x_c",
+      "units": "m"
+    },
+    {
+      "comsol_name": "yCenter",
+      "description": "y coordinate of the square-domain centre",
+      "evidence_ids": [],
+      "expression": "0",
+      "group": "v_geometry",
+      "id": "yCenter",
+      "source": "auxiliary",
+      "symbol": "y_c",
+      "units": "m"
+    },
+    {
+      "comsol_name": "radius",
+      "description": "radial distance from the seed centre",
+      "evidence_ids": [],
+      "expression": "sqrt((x-xCenter)^2+(y-yCenter)^2)",
+      "group": "v_geometry",
+      "id": "radius",
+      "source": "auxiliary",
+      "symbol": "r",
+      "units": "m"
+    },
+    {
+      "comsol_name": "theta",
+      "description": "interface-normal angle",
+      "evidence_ids": [
+        "eq4sigma"
+      ],
+      "expression": "atan2(-py,-px)",
+      "group": "v_interface",
+      "id": "theta",
+      "source": "constitutive",
+      "symbol": "theta",
+      "units": "rad"
+    },
+    {
+      "comsol_name": "anisArg",
+      "description": "anisotropy angular argument",
+      "evidence_ids": [
+        "eq4sigma"
+      ],
+      "expression": "jmode*(theta-theta0)",
+      "group": "v_interface",
+      "id": "anisArg",
+      "source": "constitutive",
+      "symbol": "j(theta-theta_0)",
+      "units": "rad"
+    },
+    {
+      "comsol_name": "epsilon",
+      "description": "anisotropic interface thickness",
+      "evidence_ids": [
+        "eq3"
+      ],
+      "expression": "epsbar*(1+delta*cos(anisArg))",
+      "group": "v_interface",
+      "id": "epsilon",
+      "source": "constitutive",
+      "symbol": "epsilon(theta)",
+      "units": "m"
+    },
+    {
+      "comsol_name": "epsilonTheta",
+      "description": "angular derivative of interface thickness",
+      "evidence_ids": [
+        "eq3"
+      ],
+      "expression": "-epsbar*delta*jmode*sin(anisArg)",
+      "group": "v_interface",
+      "id": "epsilonTheta",
+      "source": "constitutive",
+      "symbol": "d epsilon/d theta",
+      "units": "m"
+    },
+    {
+      "comsol_name": "mT",
+      "description": "thermodynamic driving force",
+      "evidence_ids": [
+        "eq4m"
+      ],
+      "expression": "alpha/pi*atan(gamma*(Teq-T))",
+      "group": "v_source",
+      "id": "mT",
+      "source": "constitutive",
+      "symbol": "m(T)",
+      "units": "1"
+    },
+    {
+      "comsol_name": "noiseHashArg",
+      "description": "deterministic hash-noise phase argument",
+      "evidence_ids": [],
+      "expression": "12.9898*floor(x/hnoise)+78.233*floor(y/hnoise)+37.719*floor(t/dtnoise)+noiseSeed",
+      "group": "v_source",
+      "id": "noiseHashArg",
+      "source": "assumption",
+      "symbol": "chi argument",
+      "units": "1"
+    },
+    {
+      "comsol_name": "chi",
+      "description": "deterministic uniform noise field",
+      "evidence_ids": [],
+      "expression": "mod(abs(sin(noiseHashArg)*43758.5453),1)-0.5",
+      "group": "v_source",
+      "id": "chi",
+      "source": "assumption",
+      "symbol": "chi",
+      "units": "1"
+    },
+    {
+      "comsol_name": "heatFluxX",
+      "description": "x component of named thermal flux",
+      "evidence_ids": [
+        "eq5"
+      ],
+      "expression": "-D*Tx",
+      "group": "v_flux",
+      "id": "heatFluxX",
+      "source": "constitutive",
+      "symbol": "q_T,x",
+      "units": "1"
+    },
+    {
+      "comsol_name": "heatFluxY",
+      "description": "y component of named thermal flux",
+      "evidence_ids": [
+        "eq5"
+      ],
+      "expression": "-D*Ty",
+      "group": "v_flux",
+      "id": "heatFluxY",
+      "source": "constitutive",
+      "symbol": "q_T,y",
+      "units": "1"
+    },
+    {
+      "comsol_name": "GammaPx",
+      "description": "x component of anisotropic phase-field flux",
+      "evidence_ids": [
+        "eq3"
+      ],
+      "expression": "nojac(epsilon*epsilonTheta)*py-nojac(epsilon^2)*px",
+      "group": "v_flux",
+      "id": "GammaPx",
+      "source": "constitutive",
+      "symbol": "Gamma_x",
+      "units": "1"
+    },
+    {
+      "comsol_name": "GammaPy",
+      "description": "y component of anisotropic phase-field flux",
+      "evidence_ids": [
+        "eq3"
+      ],
+      "expression": "-nojac(epsilon*epsilonTheta)*px-nojac(epsilon^2)*py",
+      "group": "v_flux",
+      "id": "GammaPy",
+      "source": "constitutive",
+      "symbol": "Gamma_y",
+      "units": "1"
+    },
+    {
+      "comsol_name": "latentSource",
+      "description": "latent-heat source for the temperature balance",
+      "evidence_ids": [
+        "eq5"
+      ],
+      "expression": "Klatent*d(p,t)",
+      "group": "v_source",
+      "id": "latentSource",
+      "source": "constitutive",
+      "symbol": "K p_t",
+      "units": "1/s"
+    },
+    {
+      "comsol_name": "phaseSource",
+      "description": "named phase-field source including deterministic noise",
+      "evidence_ids": [
+        "eq3"
+      ],
+      "expression": "p*(1-p)*(p-0.5+mT)+noiseAmp*p*(1-p)*chi",
+      "group": "v_source",
+      "id": "phaseSource",
+      "source": "constitutive",
+      "symbol": "p(1-p)(p-1/2+m)+noise",
+      "units": "1/s"
+    },
+    {
+      "comsol_name": "phaseInitial",
+      "description": "smooth circular initial phase seed",
+      "evidence_ids": [],
+      "expression": "0.5*(1-tanh((radius-R0)/(sqrt(2)*epsbar)))",
+      "group": "v_initial",
+      "id": "phaseInitial",
+      "source": "assumption",
+      "symbol": "p_0",
+      "units": "1"
+    },
+    {
+      "comsol_name": "temperatureInitial",
+      "description": "uniform initial supercooled temperature",
+      "evidence_ids": [
+        "figure7"
+      ],
+      "expression": "0",
+      "group": "v_initial",
+      "id": "temperatureInitial",
+      "source": "paper",
+      "symbol": "T_0",
+      "units": "1"
+    },
+    {
+      "comsol_name": "solidArea",
+      "description": "post-processing solid area proxy",
+      "evidence_ids": [],
+      "expression": "intop1(p)",
+      "group": "v_diagnostics",
+      "id": "solidArea",
+      "source": "auxiliary",
+      "symbol": "A_s",
+      "units": "m^2"
+    },
+    {
+      "comsol_name": "enthalpyInvariant",
+      "description": "post-processing enthalpy invariant",
+      "evidence_ids": [],
+      "expression": "intop1(T-Klatent*p)",
+      "group": "v_diagnostics",
+      "id": "enthalpyInvariant",
+      "source": "auxiliary",
+      "symbol": "H_inv",
+      "units": "m^2"
+    },
+    {
+      "comsol_name": "tipY",
+      "description": "maximum vertical solid coordinate",
+      "evidence_ids": [
+        "figure7"
+      ],
+      "expression": "maxop1(if(p>=0.5,y,0))",
+      "group": "v_diagnostics",
+      "id": "tipY",
+      "source": "reproduced_observation",
+      "symbol": "y_tip",
+      "units": "m"
+    },
+    {
+      "comsol_name": "halfWidth",
+      "description": "maximum horizontal solid coordinate",
+      "evidence_ids": [
+        "figure7"
+      ],
+      "expression": "maxop1(if(p>=0.5,abs(x-xCenter),0))",
+      "group": "v_diagnostics",
+      "id": "halfWidth",
+      "source": "reproduced_observation",
+      "symbol": "w_half",
+      "units": "m"
+    },
+    {
+      "comsol_name": "pMin",
+      "description": "minimum phase-field value",
+      "evidence_ids": [],
+      "expression": "minop1(p)",
+      "group": "v_diagnostics",
+      "id": "pMin",
+      "source": "reproduced_observation",
+      "symbol": "p_min",
+      "units": "1"
+    },
+    {
+      "comsol_name": "pMax",
+      "description": "maximum phase-field value",
+      "evidence_ids": [],
+      "expression": "maxop1(p)",
+      "group": "v_diagnostics",
+      "id": "pMax",
+      "source": "reproduced_observation",
+      "symbol": "p_max",
+      "units": "1"
+    },
+    {
+      "comsol_name": "TMin",
+      "description": "minimum dimensionless temperature",
+      "evidence_ids": [],
+      "expression": "minop1(T)",
+      "group": "v_diagnostics",
+      "id": "TMin",
+      "source": "reproduced_observation",
+      "symbol": "T_min",
+      "units": "1"
+    },
+    {
+      "comsol_name": "TMax",
+      "description": "maximum dimensionless temperature",
+      "evidence_ids": [],
+      "expression": "maxop1(T)",
+      "group": "v_diagnostics",
+      "id": "TMax",
+      "source": "reproduced_observation",
+      "symbol": "T_max",
+      "units": "1"
+    }
+  ],
+  "year": 1993
+}

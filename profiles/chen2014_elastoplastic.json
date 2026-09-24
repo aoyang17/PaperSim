@@ -1,0 +1,878 @@
+{
+  "equations": [
+    {
+      "classification": "auxiliary",
+      "dependent_variables": [
+        "\\mathbf{u}"
+      ],
+      "id": "displacement",
+      "latex": "\\mathbf{u}=\\mathbf{x}-\\mathbf{X}",
+      "number": 1
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\mathbf{F}"
+      ],
+      "id": "multiplicative_kinematics",
+      "latex": "\\mathbf{F}=\\mathbf{F}^{e}\\mathbf{F}^{*},\\qquad \\mathbf{F}^{*}=\\mathbf{F}^{c}\\mathbf{F}^{p}",
+      "number": 2
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\mathbf{E}^{e}",
+        "\\mathbf{E}^{c}",
+        "\\mathbf{E}^{p}"
+      ],
+      "id": "green_strain_relation",
+      "latex": "\\frac{1}{2}(\\mathbf{F}^{T}\\mathbf{F}-\\mathbf{I})=(\\mathbf{F}^{c}\\mathbf{F}^{p})^{T}\\mathbf{E}^{e}\\mathbf{F}^{c}\\mathbf{F}^{p}+(\\mathbf{F}^{p})^{T}\\mathbf{E}^{c}\\mathbf{F}^{p}+\\mathbf{E}^{p}",
+      "number": 3
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\mathbf{E}^{e}",
+        "\\mathbf{E}^{c}",
+        "\\mathbf{E}^{p}"
+      ],
+      "id": "strain_definitions",
+      "latex": "\\mathbf{E}^{e}=\\frac{1}{2}[(\\mathbf{F}^{e})^{T}\\mathbf{F}^{e}-\\mathbf{I}],\\quad \\mathbf{E}^{c}=\\frac{1}{2}[(\\mathbf{F}^{c})^{T}\\mathbf{F}^{c}-\\mathbf{I}],\\quad \\mathbf{E}^{p}=\\frac{1}{2}[(\\mathbf{F}^{p})^{T}\\mathbf{F}^{p}-\\mathbf{I}]",
+      "number": 4
+    },
+    {
+      "classification": "control",
+      "dependent_variables": [
+        "\\sigma^{0}"
+      ],
+      "id": "mechanical_equilibrium",
+      "latex": "\\sigma^{0}_{ij,j}(\\mathbf{X})=0",
+      "number": 5
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\sigma^{0}"
+      ],
+      "id": "first_piola_stress",
+      "latex": "\\sigma^{0}=\\frac{\\partial W(\\mathbf{F},\\hat c)}{\\partial\\mathbf{F}}",
+      "number": 6
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "W_{el}"
+      ],
+      "id": "elastic_energy",
+      "latex": "W_{el}(\\mathbf{F},\\hat c)=\\frac{J^{c}E}{2(1+\\nu)}\\left(\\operatorname{tr}(\\mathbf{E}^{e}\\mathbf{E}^{e})+\\frac{\\nu}{1-2\\nu}[\\operatorname{tr}\\mathbf{E}^{e}]^{2}\\right)",
+      "number": 7
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "w_{el}"
+      ],
+      "id": "intermediate_energy",
+      "latex": "w_{el}(\\mathbf{F},\\hat c)=(J^{*})^{-1}W_{el}(\\mathbf{F},\\hat c)",
+      "number": 8
+    },
+    {
+      "classification": "auxiliary",
+      "dependent_variables": [
+        "J^{*}"
+      ],
+      "id": "intermediate_jacobian",
+      "latex": "J^{*}=\\det(\\mathbf{F}^{*})",
+      "number": 9
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "J^{p}"
+      ],
+      "id": "plastic_incompressibility",
+      "latex": "w_{el}=(J^{*})^{-1}W_{el}=(J^{c})^{-1}W_{el},\\qquad J^{p}=\\det(\\mathbf{F}^{p})=1",
+      "number": 10
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\mathbf{F}^{c}"
+      ],
+      "id": "chemical_deformation",
+      "latex": "\\mathbf{F}^{c}=\\beta\\hat c\\mathbf{I}",
+      "number": 11
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\mathbf{D}^{p}"
+      ],
+      "id": "plastic_stretch_rate",
+      "latex": "\\mathbf{D}^{p}=\\frac{1}{2}(\\mathbf{L}^{p}+(\\mathbf{L}^{p})^{T})",
+      "number": 12
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\mathbf{L}^{p}"
+      ],
+      "id": "plastic_velocity_gradient",
+      "latex": "\\mathbf{L}^{p}=\\mathbf{F}^{e}\\mathbf{F}^{c}\\dot{\\mathbf{F}}^{p}(\\mathbf{F}^{p})^{-1}(\\mathbf{F}^{c})^{-1}(\\mathbf{F}^{e})^{-1}",
+      "number": 13
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\mathbf{D}^{p}"
+      ],
+      "id": "j2_flow",
+      "latex": "\\mathbf{D}^{p}=\\frac{3}{2}\\frac{\\boldsymbol{\\tau}^{\\prime}}{\\tau_{e}}\\dot{\\varepsilon}^{p}_{eq}",
+      "number": 14
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\sigma_{y}"
+      ],
+      "id": "linear_hardening",
+      "latex": "\\sigma_{y}=\\sigma_{y0}+H\\bar{\\varepsilon}^{p}",
+      "number": 15
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\bar{\\varepsilon}^{p}"
+      ],
+      "id": "accumulated_plastic_stretch",
+      "latex": "\\bar{\\varepsilon}^{p}=\\int_{0}^{t}\\dot{\\varepsilon}^{p}_{eq}\\,dt",
+      "number": 16
+    },
+    {
+      "classification": "auxiliary",
+      "dependent_variables": [
+        "G"
+      ],
+      "id": "total_free_energy",
+      "latex": "G=\\int_{\\Omega_0}\\left[f_{ch}(\\hat c)+f_{el}(\\mathbf{F},\\hat c)+f_{pl}(\\mathbf{F})+\\frac{\\kappa}{2}|\\nabla\\hat c|^{2}\\right]d\\Omega_0",
+      "number": 17
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "f_{ch}"
+      ],
+      "id": "chemical_free_energy",
+      "latex": "f_{ch}(\\hat c)=c_{max}RT\\left[\\hat c\\ln\\hat c+(1-\\hat c)\\ln(1-\\hat c)+\\Omega\\hat c(1-\\hat c)\\right]",
+      "number": 18
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "f_{el}"
+      ],
+      "id": "elastic_free_energy",
+      "latex": "f_{el}(\\mathbf{F},\\hat c)=W_{el}(\\mathbf{F},\\hat c)",
+      "number": 19
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "f_{pl}"
+      ],
+      "id": "plastic_energy",
+      "latex": "f_{pl}(\\mathbf{F})=\\int_{0}^{t}\\dot W_{pl}(\\mathbf{F})\\,dt",
+      "number": 20
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "W_{pl}"
+      ],
+      "id": "plastic_power",
+      "latex": "\\dot W_{pl}(\\mathbf{F})=\\boldsymbol{\\tau}:\\mathbf{D}^{p}",
+      "number": 21
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\mu"
+      ],
+      "id": "chemical_potential",
+      "latex": "\\mu=\\frac{\\delta G}{\\delta\\hat c}=\\mu_{ch}+\\mu_{el}+\\mu_{pl}",
+      "number": 22
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\mu_{ch}",
+        "\\mu_{pl}"
+      ],
+      "id": "chemical_potential_terms",
+      "latex": "\\mu_{ch}=\\frac{\\partial f_{ch}}{\\partial\\hat c},\\qquad \\mu_{pl}=\\frac{\\partial f_{pl}}{\\partial\\hat c}=0",
+      "number": 23
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\mu_{el}"
+      ],
+      "id": "elastic_potential",
+      "latex": "\\mu_{el}=\\frac{\\partial f_{el}}{\\partial\\hat c}",
+      "number": 24
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\mu_{el}"
+      ],
+      "id": "elastic_potential_identity",
+      "latex": "\\mu_{el}=3J^{c}w_{el}-\\tau_{kk}+J^{c}\\frac{\\partial C_{ijkl}}{\\partial\\hat c}E^{e}_{ij}E^{e}_{kl}",
+      "number": 25
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "f_{el}"
+      ],
+      "id": "elastic_energy_derivative",
+      "latex": "\\frac{\\partial f_{el}}{\\partial\\hat c}=\\frac{\\partial W_{el}}{\\partial\\hat c}\\frac{1}{J^{c}}-\\frac{W_{el}}{(J^{c})^{2}}\\frac{\\partial J^{c}}{\\partial\\hat c}",
+      "number": 26
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "f_{pl}"
+      ],
+      "id": "plastic_concentration_independence",
+      "latex": "\\frac{\\partial f_{pl}}{\\partial\\hat c}=0",
+      "number": 27
+    },
+    {
+      "classification": "control",
+      "dependent_variables": [
+        "\\hat c"
+      ],
+      "id": "mass_conservation",
+      "latex": "\\frac{\\partial\\hat c}{\\partial t}=-\\nabla\\cdot\\mathbf{J}_{flux}",
+      "number": 28
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\mathbf{J}_{flux}"
+      ],
+      "id": "flux_law",
+      "latex": "\\mathbf{J}_{flux}=-M_{Li}(\\hat c)\\nabla\\mu",
+      "number": 29
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "M_{Li}"
+      ],
+      "id": "mobility",
+      "latex": "M_{Li}(\\hat c)=M_{0}\\hat c(1-\\hat c)",
+      "number": 30
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\mu"
+      ],
+      "id": "chemical_potential_gradient",
+      "latex": "\\nabla\\mu=\\nabla\\left(c_{max}RT[\\Omega(1-2\\hat c)+\\ln(\\hat c/(1-\\hat c))]-\\kappa\\nabla^{2}\\hat c+\\mu_{el}\\right)",
+      "number": 31
+    },
+    {
+      "classification": "control",
+      "dependent_variables": [
+        "\\hat c"
+      ],
+      "id": "cahn_hilliard",
+      "latex": "\\frac{\\partial\\hat c}{\\partial t}=\\nabla\\cdot\\left[M_{Li}(\\hat c)\\nabla\\mu\\right]",
+      "number": 32
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\mu"
+      ],
+      "id": "total_potential",
+      "latex": "\\mu=c_{max}RT\\left[\\Omega(1-2\\hat c)+\\ln\\frac{\\hat c}{1-\\hat c}\\right]-\\kappa\\nabla^{2}\\hat c+\\mu_{el}",
+      "number": 33
+    },
+    {
+      "classification": "boundary",
+      "dependent_variables": [
+        "\\mu"
+      ],
+      "id": "zero_flux_boundary",
+      "latex": "-\\mathbf{n}\\cdot\\nabla\\mu=0",
+      "number": 34
+    },
+    {
+      "classification": "boundary",
+      "dependent_variables": [
+        "\\boldsymbol{\\sigma}^{0}"
+      ],
+      "id": "traction_free_boundary",
+      "latex": "-\\mathbf{n}\\cdot\\boldsymbol{\\sigma}^{0}=0",
+      "number": 35
+    },
+    {
+      "classification": "auxiliary",
+      "dependent_variables": [
+        "\\lambda"
+      ],
+      "id": "interface_width",
+      "latex": "\\lambda=(\\hat c_{\\beta}-\\hat c_{\\alpha})\\sqrt{\\kappa/(2\\Delta g)}=1.12\\,\\mathrm{nm}",
+      "number": 40
+    }
+  ],
+  "java_model": {
+    "class_name": "Chen2014PaperConstitutive",
+    "label": "Chen 2014 phase-field finite-deformation elasto-plastic model from extracted constitutive equations",
+    "nomenclature": [
+      [
+        "F",
+        "total deformation gradient",
+        "1",
+        "Ftot",
+        "Eq. 2"
+      ],
+      [
+        "F^e",
+        "elastic deformation",
+        "1",
+        "Fe",
+        "Eq. 2"
+      ],
+      [
+        "F^c",
+        "chemical deformation",
+        "1",
+        "Fc",
+        "Eq. 11"
+      ],
+      [
+        "F^p",
+        "plastic deformation",
+        "1",
+        "Fp",
+        "Eq. 2"
+      ],
+      [
+        "c",
+        "normalized Li concentration",
+        "1",
+        "chat",
+        "Eq. 32"
+      ],
+      [
+        "mu",
+        "chemical potential",
+        "Pa",
+        "muhat*S",
+        "Eq. 33"
+      ],
+      [
+        "sigma_y",
+        "yield strength",
+        "Pa",
+        "sigma_y",
+        "Eq. 15"
+      ],
+      [
+        "H",
+        "hardening modulus",
+        "Pa",
+        "Hiso",
+        "Eq. 15"
+      ],
+      [
+        "kappa",
+        "gradient coefficient",
+        "J/m",
+        "kappa",
+        "Eq. 18"
+      ],
+      [
+        "M_Li",
+        "mobility",
+        "m^5/(J*s)",
+        "mobility",
+        "Eq. 30"
+      ]
+    ],
+    "output_mph": "Chen2014PaperConstitutive_built.mph",
+    "parameters_table": [
+      [
+        "A",
+        "A",
+        "70 nm",
+        "nanowire radius",
+        "Table I"
+      ],
+      [
+        "β",
+        "beta",
+        "0.5874",
+        "chemical expansion",
+        "Table I"
+      ],
+      [
+        "κ",
+        "kappa",
+        "2.0e-9 J/m",
+        "gradient coefficient",
+        "Table I"
+      ],
+      [
+        "D",
+        "Dli",
+        "2e-17 m²/s",
+        "Li diffusivity",
+        "p. F3168"
+      ],
+      [
+        "Ω",
+        "Omix",
+        "2.6",
+        "regular-solution parameter",
+        "Eq. 18"
+      ],
+      [
+        "σy",
+        "sy0",
+        "1.5 GPa",
+        "initial yield",
+        "p. F3168"
+      ],
+      [
+        "H",
+        "Hiso",
+        "1.0 GPa",
+        "hardening modulus",
+        "p. F3168"
+      ]
+    ],
+    "parametric_sweep": [],
+    "pde_ode_settings": [
+      [
+        "w_chat",
+        "1",
+        "1/s",
+        "tref*d(chat,t)+tref*Dli*chat*(1-chat)*muhatx*test(chatx)"
+      ],
+      [
+        "w_mu",
+        "1",
+        "1",
+        "(muhat-fchemprime-mu_el/S)*test(muhat)-(kappa/S)*chatx*test(muhatx)"
+      ],
+      [
+        "w_radial",
+        "1",
+        "1",
+        "A*(Pr/S)*test(urx)+(Pt/S)*test(ur)"
+      ],
+      [
+        "w_lr",
+        "1",
+        "1/s",
+        "tref*d(lr,t)-1.5*eta*devr/tauden"
+      ],
+      [
+        "w_lt",
+        "1",
+        "1/s",
+        "tref*d(lt,t)-1.5*eta*devt/tauden"
+      ],
+      [
+        "w_qp",
+        "1",
+        "1/s",
+        "tref*d(qp,t)-eta"
+      ],
+      [
+        "w_ncp",
+        "1",
+        "1",
+        "ncp"
+      ]
+    ],
+    "self_check": [
+      "Control equations are carried by WeakContribution features.",
+      "Constitutive relations are named variables under Definitions > Variables.",
+      "All dependent fields declare dimensionless units.",
+      "Weak contribution residual units are listed in pde_ode_settings.",
+      "No constitutive expression is hidden in a native material node.",
+      "One build-only Java file and one MPH output are declared.",
+      "Paper equations use normalized human-readable LaTeX.",
+      "Nomenclature maps source symbols to COMSOL variables."
+    ],
+    "template_file": "profiles/templates/chen2014_pilot.java",
+    "tree_changes": [
+      "Component c1 with normalized radial interval",
+      "DependentVariableField set for c, mu, ur and DG plastic history",
+      "Constitutive variables under Definitions > Variables",
+      "WeakContribution control equations",
+      "One build-only MPH"
+    ],
+    "variables_definitions": [
+      [
+        "rho",
+        "R/A",
+        "1",
+        "normalized radial coordinate"
+      ],
+      [
+        "Ftot",
+        "F_e F_c F_p",
+        "1",
+        "multiplicative deformation decomposition"
+      ],
+      [
+        "W",
+        "elastic energy density",
+        "Pa",
+        "Eq. 7"
+      ],
+      [
+        "tau_i",
+        "Kirchhoff stress components",
+        "Pa",
+        "finite-strain elasticity"
+      ],
+      [
+        "sigma_y",
+        "sigma_y0+H*qp",
+        "Pa",
+        "linear hardening"
+      ],
+      [
+        "mu_el",
+        "elastic chemical potential",
+        "Pa",
+        "energy derivative"
+      ]
+    ]
+  },
+  "paper_id": "chen2014_elastoplastic",
+  "parameters": [
+    {
+      "comsol_name": "A",
+      "meaning": "initial nanowire radius",
+      "page": 5,
+      "quote": "of Si electrode is A = 70 nm. The time step",
+      "source_symbol": "A",
+      "status": "reported",
+      "units": "m",
+      "value": 7e-08
+    },
+    {
+      "comsol_name": "S",
+      "meaning": "chemical energy and stress normalization scale",
+      "page": 5,
+      "quote": "thus cmaxRT = 0.915 GPa.",
+      "source_symbol": "c_{max}RT",
+      "status": "reported",
+      "units": "Pa",
+      "value": 915000000.0
+    },
+    {
+      "comsol_name": "Dli",
+      "meaning": "Li inter-diffusion coefficient",
+      "page": 5,
+      "quote": "the inter-diffusion coefﬁcient D of 2 × 10−17m2/s.",
+      "source_symbol": "D",
+      "status": "reported",
+      "units": "m^2/s",
+      "value": 2e-17
+    },
+    {
+      "comsol_name": "kappa",
+      "meaning": "gradient energy coefficient",
+      "page": 5,
+      "quote": "The gradient energy coefﬁcient κ is assumed to be 2.0 × 10−9 Jm−1.",
+      "source_symbol": "\\kappa",
+      "status": "reported",
+      "units": "J/m",
+      "value": 2e-09
+    },
+    {
+      "comsol_name": "beta",
+      "meaning": "compositional expansion coefficient",
+      "page": 5,
+      "quote": "The coefﬁcient of compositional expansion is taken as β = 0.5874",
+      "source_symbol": "\\beta",
+      "status": "reported",
+      "units": "1",
+      "value": 0.5874
+    },
+    {
+      "comsol_name": "Omix",
+      "meaning": "regular-solution interaction parameter",
+      "page": 4,
+      "quote": "as \u0003 = 2.6 in order to enforce the Li-rich phase to take such a",
+      "source_symbol": "\\Omega",
+      "status": "reported",
+      "units": "1",
+      "value": 2.6
+    },
+    {
+      "comsol_name": "cbeta",
+      "meaning": "printed Li-rich boundary concentration",
+      "page": 4,
+      "quote": "is 3.75/4.4 = 0.872. Thus, the coefﬁcient",
+      "source_symbol": "\\hat c_{\\beta}",
+      "status": "reported",
+      "units": "1",
+      "value": 0.872
+    },
+    {
+      "comsol_name": "E0",
+      "meaning": "Young modulus of unlithiated Si",
+      "page": 5,
+      "quote": "assumed to vary linearly with Li concentration from 160 to 40 GPa",
+      "source_symbol": "E_{Si}",
+      "status": "reported",
+      "units": "Pa",
+      "value": 160000000000.0
+    },
+    {
+      "comsol_name": "E1",
+      "meaning": "Young modulus of fully lithiated Si",
+      "page": 5,
+      "quote": "assumed to vary linearly with Li concentration from 160 to 40 GPa",
+      "source_symbol": "E_{Li-Si}",
+      "status": "reported",
+      "units": "Pa",
+      "value": 40000000000.0
+    },
+    {
+      "comsol_name": "nu0",
+      "meaning": "Poisson ratio of unlithiated Si",
+      "page": 5,
+      "quote": "and from 0.24 to 0.22,20,43 respectively.",
+      "source_symbol": "\\nu_{Si}",
+      "status": "reported",
+      "units": "1",
+      "value": 0.24
+    },
+    {
+      "comsol_name": "nu1",
+      "meaning": "Poisson ratio of fully lithiated Si",
+      "page": 5,
+      "quote": "and from 0.24 to 0.22,20,43 respectively.",
+      "source_symbol": "\\nu_{Li-Si}",
+      "status": "reported",
+      "units": "1",
+      "value": 0.22
+    },
+    {
+      "comsol_name": "sy0",
+      "meaning": "initial yield strength",
+      "page": 5,
+      "quote": "for the yield strength σy = 1.5 GPa, and the hardening modulus H =",
+      "source_symbol": "\\sigma_{y0}",
+      "status": "reported",
+      "units": "Pa",
+      "value": 1500000000.0
+    },
+    {
+      "comsol_name": "Hiso",
+      "meaning": "linear isotropic hardening modulus",
+      "page": 5,
+      "quote": "for the yield strength σy = 1.5 GPa, and the hardening modulus H =",
+      "source_symbol": "H",
+      "status": "reported",
+      "units": "Pa",
+      "value": 1000000000.0
+    },
+    {
+      "comsol_name": "M0",
+      "meaning": "reference Cahn-Hilliard mobility",
+      "page": 5,
+      "quote": "The mobility M0 = D/cmaxRT for the Cahn-Hilliard equation (see",
+      "source_symbol": "M_0",
+      "status": "reported",
+      "units": "m^5/(J*s)",
+      "value": 2.186e-26
+    },
+    {
+      "comsol_name": "c0",
+      "meaning": "declared log-domain initial concentration",
+      "page": 2,
+      "quote": "Figure 1. Schematic diagram showing a typical lithiation process from (a) the initial state",
+      "source_symbol": "\\hat c_0",
+      "status": "assumption",
+      "units": "1",
+      "value": 0.0001
+    },
+    {
+      "comsol_name": "tramp",
+      "meaning": "declared smooth reservoir startup time",
+      "page": 5,
+      "quote": "taken as 2.45 s.",
+      "source_symbol": "t_{startup}",
+      "status": "assumption",
+      "units": "s",
+      "value": 0.245
+    },
+    {
+      "comsol_name": "tref",
+      "meaning": "paper integration time-scale reference",
+      "page": 5,
+      "quote": "taken as 2.45 s.",
+      "source_symbol": "t_{ref}",
+      "status": "reported",
+      "units": "s",
+      "value": 2.45
+    },
+    {
+      "comsol_name": "dtmax",
+      "meaning": "paper integration time step",
+      "page": 5,
+      "quote": "taken as 2.45 s.",
+      "source_symbol": "\\Delta t",
+      "status": "reported",
+      "units": "s",
+      "value": 2.45
+    },
+    {
+      "comsol_name": "tfinal",
+      "meaning": "current deterministic pilot endpoint",
+      "page": 5,
+      "quote": "of Si electrode is A = 70 nm. The time step",
+      "source_symbol": "t_{final}",
+      "status": "assumption",
+      "units": "s",
+      "value": 24.5
+    },
+    {
+      "comsol_name": "tau_floor",
+      "meaning": "declared denominator safeguard",
+      "page": 1,
+      "quote": "tracking of a sharp interface in every step of numerical simulations.",
+      "source_symbol": "\\tau_{floor}",
+      "status": "assumption",
+      "units": "Pa",
+      "value": 0.000915
+    },
+    {
+      "comsol_name": "Nelem",
+      "meaning": "declared radial mesh element count",
+      "page": 8,
+      "quote": "solved by the ﬁnite element method.",
+      "source_symbol": "N_{elem}",
+      "status": "assumption",
+      "units": "1",
+      "value": 280
+    }
+  ],
+  "relations": [
+    {
+      "id": "multiplicative-decomposition",
+      "page": 2,
+      "quote": "F = FeF∗,",
+      "relation": "F=Fe*Fc*Fp",
+      "relation_type": "constitutive",
+      "source_symbols": [
+        "\\mathbf{F}"
+      ],
+      "target_symbol": "\\mathbf{F}"
+    },
+    {
+      "id": "linear-hardening",
+      "page": 3,
+      "quote": "σy = σy0 + H¯εp,",
+      "relation": "sigma_y=sigma_y0+H*ebar_p",
+      "relation_type": "constitutive",
+      "source_symbols": [
+        "\\sigma_{y0}",
+        "H",
+        "\\bar{\\varepsilon}^{p}"
+      ],
+      "target_symbol": "\\sigma_y"
+    },
+    {
+      "id": "mobility-relation",
+      "page": 4,
+      "quote": "[ˆc(1 −ˆc)],",
+      "relation": "M_Li=M0*c*(1-c)",
+      "relation_type": "constitutive",
+      "source_symbols": [
+        "M_0",
+        "\\hat c"
+      ],
+      "target_symbol": "M_{Li}"
+    },
+    {
+      "id": "interface-width",
+      "page": 6,
+      "quote": "κ/2\u0004g = 1.12 nm,",
+      "relation": "lambda=(c_beta-c_alpha)*sqrt(kappa/(2*Delta_g))",
+      "relation_type": "auxiliary",
+      "source_symbols": [
+        "\\hat c_\\beta",
+        "\\hat c_\\alpha",
+        "\\kappa",
+        "\\Delta g"
+      ],
+      "target_symbol": "\\lambda"
+    }
+  ],
+  "schema_version": "papersim.extraction_profile.v1",
+  "unit_equations": [
+    {
+      "expected_units": "Pa",
+      "id": "elastic-energy",
+      "term_units": [
+        "Pa",
+        "Pa"
+      ]
+    },
+    {
+      "expected_units": "Pa/m",
+      "id": "equilibrium",
+      "term_units": [
+        "Pa/m",
+        "Pa/m"
+      ]
+    },
+    {
+      "expected_units": "Pa",
+      "id": "hardening",
+      "term_units": [
+        "Pa",
+        "Pa"
+      ]
+    },
+    {
+      "expected_units": "1/s",
+      "id": "cahn-hilliard",
+      "term_units": [
+        "1/s",
+        "1/s"
+      ]
+    },
+    {
+      "expected_units": "m^5/(J*s)",
+      "id": "mobility",
+      "term_units": [
+        "m^5/(J*s)",
+        "m^5/(J*s)"
+      ]
+    },
+    {
+      "expected_units": "m",
+      "id": "interface-width",
+      "term_units": [
+        "m",
+        "m"
+      ]
+    }
+  ]
+}

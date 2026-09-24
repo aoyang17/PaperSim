@@ -1,0 +1,26 @@
+name: Feature request
+description: Propose a deterministic PaperSim capability
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What reproducibility or audit gap does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: contract
+    attributes:
+      label: Proposed contract
+      description: Describe inputs, outputs, gates, and failure behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: tests
+    attributes:
+      label: Independent tests
+      description: List the unit, contract, failure, and end-to-end tests required.
+    validations:
+      required: true

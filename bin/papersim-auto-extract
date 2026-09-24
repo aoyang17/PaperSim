@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cat >&2 <<'MSG'
+papersim-auto-extract is retired by the canonical case workflow.
+Use:
+  papersim case init --surname ... --year ... --topic ... --paper ... --title ... --goal ...
+  papersim iteration CASE_ID --iteration 1
+  papersim extract CASE_ID --iteration 1 --profile profiles/<case_id>.json
+MSG
+exit 2

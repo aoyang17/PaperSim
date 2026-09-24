@@ -1,0 +1,1023 @@
+{
+  "equations": [
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\varepsilon_{ij}"
+      ],
+      "id": "total_strain_decomposition",
+      "latex": "\\dot{\\varepsilon}_{ij}=\\dot{\\varepsilon}^{c}_{ij}+\\dot{\\varepsilon}^{e}_{ij}+\\dot{\\varepsilon}^{p}_{ij}",
+      "number": 1,
+      "referenced_symbols": [
+        "\\varepsilon^{c}_{ij}",
+        "\\varepsilon^{e}_{ij}",
+        "\\varepsilon^{p}_{ij}"
+      ]
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\varepsilon^{c}_{ij}"
+      ],
+      "id": "chemical_strain_rate",
+      "latex": "\\dot{\\varepsilon}^{c}_{ij}=\\beta_{ij}\\dot{c}",
+      "number": 2,
+      "referenced_symbols": [
+        "\\beta_{ij}",
+        "c"
+      ]
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\varepsilon^{e}_{ij}"
+      ],
+      "id": "hooke_rate",
+      "latex": "\\dot{\\varepsilon}^{e}_{ij}=\\frac{1}{E}\\left[(1+\\nu)\\dot{\\sigma}_{ij}-\\nu\\dot{\\sigma}_{kk}\\delta_{ij}\\right]",
+      "number": 3,
+      "referenced_symbols": [
+        "E",
+        "\\nu",
+        "\\sigma_{ij}"
+      ]
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\varepsilon^{p}_{ij}"
+      ],
+      "id": "j2_flow",
+      "latex": "\\dot{\\varepsilon}^{p}_{ij}=\\dot{\\lambda}s_{ij}",
+      "number": 4,
+      "referenced_symbols": [
+        "\\lambda",
+        "s_{ij}"
+      ]
+    },
+    {
+      "classification": "auxiliary",
+      "dependent_variables": [
+        "c"
+      ],
+      "id": "logistic_concentration",
+      "latex": "c(r)=\\frac{1}{\\left[1+Q\\exp(-B(r-r_c))\\right]^{1/a}}",
+      "number": 5,
+      "referenced_symbols": [
+        "Q",
+        "B",
+        "r",
+        "r_c",
+        "a"
+      ]
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\varepsilon_r",
+        "\\varepsilon_\\theta",
+        "\\varepsilon_\\phi"
+      ],
+      "id": "spherical_strain_rates",
+      "latex": "\\dot{\\varepsilon}_r=\\dot{\\varepsilon}^{c}_r+\\dot{\\varepsilon}^{e}_r+\\dot{\\varepsilon}^{p}_r,\\qquad \\dot{\\varepsilon}_\\theta=\\dot{\\varepsilon}_\\phi=\\dot{\\varepsilon}^{c}_\\theta+\\dot{\\varepsilon}^{e}_\\theta+\\dot{\\varepsilon}^{p}_\\theta",
+      "number": 6,
+      "referenced_symbols": [
+        "\\varepsilon^{c}_r",
+        "\\varepsilon^{e}_r",
+        "\\varepsilon^{p}_r",
+        "\\varepsilon^{c}_\\theta",
+        "\\varepsilon^{e}_\\theta",
+        "\\varepsilon^{p}_\\theta"
+      ]
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\varepsilon^{c}_r",
+        "\\varepsilon^{c}_\\theta"
+      ],
+      "id": "spherical_chemical_strain",
+      "latex": "\\dot{\\varepsilon}^{c}_r=\\beta_r\\dot{c},\\qquad \\dot{\\varepsilon}^{c}_\\theta=\\dot{\\varepsilon}^{c}_\\phi=\\beta_\\theta\\dot{c}",
+      "number": 7,
+      "referenced_symbols": [
+        "\\beta_r",
+        "\\beta_\\theta",
+        "c"
+      ]
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\sigma_r",
+        "\\sigma_\\theta"
+      ],
+      "id": "hooke_spherical",
+      "latex": "\\dot{\\sigma}_r=\\frac{E}{(1+\\nu)(1-2\\nu)}\\left[(1-\\nu)\\dot{\\varepsilon}^{e}_r+2\\nu\\dot{\\varepsilon}^{e}_\\theta\\right],\\qquad \\dot{\\sigma}_\\theta=\\frac{E}{(1+\\nu)(1-2\\nu)}\\left[\\dot{\\varepsilon}^{e}_\\theta+\\nu\\dot{\\varepsilon}^{e}_r\\right]",
+      "number": 8,
+      "referenced_symbols": [
+        "E",
+        "\\nu",
+        "\\varepsilon^{e}_r",
+        "\\varepsilon^{e}_\\theta"
+      ]
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\varepsilon^{p}_r",
+        "\\varepsilon^{p}_\\theta"
+      ],
+      "id": "plastic_flow_spherical",
+      "latex": "\\dot{\\varepsilon}^{p}_r=\\dot{\\varepsilon}^{p}\\frac{3s_r}{2\\sigma_e},\\qquad \\dot{\\varepsilon}^{p}_\\theta=\\dot{\\varepsilon}^{p}_\\phi=\\dot{\\varepsilon}^{p}\\frac{3s_\\theta}{2\\sigma_e}",
+      "number": 9,
+      "referenced_symbols": [
+        "\\dot{\\varepsilon}^{p}",
+        "s_r",
+        "s_\\theta",
+        "\\sigma_e"
+      ]
+    },
+    {
+      "classification": "auxiliary",
+      "dependent_variables": [
+        "s_r",
+        "s_\\theta"
+      ],
+      "id": "deviatoric_stress",
+      "latex": "s_r=\\frac{2}{3}(\\sigma_r-\\sigma_\\theta),\\qquad s_\\theta=s_\\phi=-\\frac{1}{3}(\\sigma_r-\\sigma_\\theta)",
+      "number": 10,
+      "referenced_symbols": [
+        "\\sigma_r",
+        "\\sigma_\\theta"
+      ]
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\sigma_e"
+      ],
+      "id": "effective_stress",
+      "latex": "\\sigma_e=\\sqrt{\\frac{3}{2}s_{ij}s_{ij}}=\\left|\\sigma_r-\\sigma_\\theta\\right|",
+      "number": 11,
+      "referenced_symbols": [
+        "s_{ij}",
+        "\\sigma_r",
+        "\\sigma_\\theta"
+      ]
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\varepsilon^{p}"
+      ],
+      "id": "viscoplastic_rate",
+      "latex": "\\dot{\\varepsilon}^{p}=\\dot{\\varepsilon}^{p}_{0}\\left(\\frac{\\sigma_e}{s}\\right)^{1/m}",
+      "number": 12,
+      "referenced_symbols": [
+        "\\dot{\\varepsilon}^{p}_{0}",
+        "\\sigma_e",
+        "s",
+        "m"
+      ]
+    },
+    {
+      "classification": "control",
+      "dependent_variables": [
+        "\\sigma_r",
+        "\\sigma_\\theta"
+      ],
+      "id": "radial_equilibrium",
+      "latex": "\\frac{d\\sigma_r}{dr}+\\frac{2}{r}(\\sigma_r-\\sigma_\\theta)=0",
+      "number": 13,
+      "referenced_symbols": [
+        "r"
+      ]
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\varepsilon_r",
+        "\\varepsilon_\\theta",
+        "V_r"
+      ],
+      "id": "velocity_strain_rates",
+      "latex": "\\dot{\\varepsilon}_r=\\frac{dV_r}{dr},\\qquad \\dot{\\varepsilon}_\\theta=\\frac{V_r}{r}",
+      "number": 14,
+      "referenced_symbols": [
+        "r"
+      ]
+    },
+    {
+      "classification": "boundary",
+      "dependent_variables": [
+        "\\sigma_r"
+      ],
+      "id": "surface_traction",
+      "latex": "\\sigma_r(r=R)=0",
+      "number": 15,
+      "referenced_symbols": [
+        "R"
+      ]
+    },
+    {
+      "classification": "boundary",
+      "dependent_variables": [
+        "V_r"
+      ],
+      "id": "center_velocity",
+      "latex": "V_r(r=0)=0",
+      "number": 16,
+      "referenced_symbols": []
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\sigma_r"
+      ],
+      "id": "radial_stress_rate",
+      "latex": "\\dot{\\sigma}_r=\\frac{E}{(1+\\nu)(1-2\\nu)}\\left[(1-\\nu)\\left(\\frac{dV_r}{dr}-\\dot{\\varepsilon}^{c}_r-\\dot{\\varepsilon}^{p}_r\\right)+2\\nu\\left(\\frac{V_r}{r}-\\dot{\\varepsilon}^{c}_\\theta-\\dot{\\varepsilon}^{p}_\\theta\\right)\\right]",
+      "number": 17,
+      "referenced_symbols": [
+        "V_r",
+        "E",
+        "\\nu",
+        "\\varepsilon^{c}_r",
+        "\\varepsilon^{p}_r",
+        "\\varepsilon^{c}_\\theta",
+        "\\varepsilon^{p}_\\theta"
+      ]
+    },
+    {
+      "classification": "constitutive",
+      "dependent_variables": [
+        "\\sigma_r",
+        "\\sigma_\\theta"
+      ],
+      "id": "hoop_stress_rate",
+      "latex": "\\dot{\\sigma}_r-\\dot{\\sigma}_\\theta=\\frac{E}{1+\\nu}\\left[\\frac{dV_r}{dr}-\\frac{V_r}{r}-\\dot{\\varepsilon}^{c}_r-\\dot{\\varepsilon}^{p}_r+\\dot{\\varepsilon}^{c}_\\theta+\\dot{\\varepsilon}^{p}_\\theta\\right]",
+      "number": 18,
+      "referenced_symbols": [
+        "V_r",
+        "E",
+        "\\nu",
+        "\\varepsilon^{c}_r",
+        "\\varepsilon^{p}_r",
+        "\\varepsilon^{c}_\\theta",
+        "\\varepsilon^{p}_\\theta"
+      ]
+    },
+    {
+      "classification": "control",
+      "dependent_variables": [
+        "V_r"
+      ],
+      "id": "velocity_ode",
+      "latex": "\\frac{d^2V_r}{dr^2}+\\frac{2}{r}\\frac{dV_r}{dr}-\\frac{2V_r}{r^2}=\\frac{1}{1-\\nu}\\frac{d}{dr}\\left[(1-\\nu)(\\dot{\\varepsilon}^{c}_r+\\dot{\\varepsilon}^{p}_r)+2\\nu(\\dot{\\varepsilon}^{c}_\\theta+\\dot{\\varepsilon}^{p}_\\theta)\\right]+\\frac{2(1-2\\nu)}{1-\\nu}\\frac{1}{r}\\left[(\\dot{\\varepsilon}^{c}_r+\\dot{\\varepsilon}^{p}_r)-(\\dot{\\varepsilon}^{c}_\\theta+\\dot{\\varepsilon}^{p}_\\theta)\\right]",
+      "number": 19,
+      "referenced_symbols": [
+        "r",
+        "\\nu",
+        "\\varepsilon^{c}_r",
+        "\\varepsilon^{p}_r",
+        "\\varepsilon^{c}_\\theta",
+        "\\varepsilon^{p}_\\theta"
+      ]
+    }
+  ],
+  "java_model": {
+    "class_name": "Huang2013PaperConstitutive",
+    "geometry": {
+      "axis_selection": {
+        "tag": "left"
+      },
+      "dimension": 1,
+      "interval": [
+        "0",
+        "1"
+      ]
+    },
+    "label": "Huang 2013 lithiation stress model from extracted constitutive equations",
+    "mesh": {
+      "elements": "Nelem"
+    },
+    "nomenclature": [
+      {
+        "comsol_variable": "u,u2,u3,u4",
+        "meaning": "total strain",
+        "source": "Eq. (1)",
+        "source_symbol": "\\varepsilon_{ij}",
+        "units": "1"
+      },
+      {
+        "comsol_variable": "ecr,ect",
+        "meaning": "chemical strain",
+        "source": "Eq. (2)",
+        "source_symbol": "\\varepsilon^{c}_{ij}",
+        "units": "1"
+      },
+      {
+        "comsol_variable": "er,et",
+        "meaning": "elastic strain",
+        "source": "Eq. (3)",
+        "source_symbol": "\\varepsilon^{e}_{ij}",
+        "units": "1"
+      },
+      {
+        "comsol_variable": "u2,u3,u4",
+        "meaning": "plastic strain",
+        "source": "Eq. (4)",
+        "source_symbol": "\\varepsilon^{p}_{ij}",
+        "units": "1"
+      },
+      {
+        "comsol_variable": "c",
+        "meaning": "normalized lithium concentration",
+        "source": "Eq. (5)",
+        "source_symbol": "c",
+        "units": "1"
+      },
+      {
+        "comsol_variable": "sigr_over_E",
+        "meaning": "radial stress",
+        "source": "Eq. (8)",
+        "source_symbol": "\\sigma_r",
+        "units": "Pa"
+      },
+      {
+        "comsol_variable": "sigt_over_E",
+        "meaning": "hoop stress",
+        "source": "Eq. (8)",
+        "source_symbol": "\\sigma_\\theta",
+        "units": "Pa"
+      },
+      {
+        "comsol_variable": "mises_over_E,se_over_E",
+        "meaning": "effective stress",
+        "source": "Eq. (11)",
+        "source_symbol": "\\sigma_e",
+        "units": "Pa"
+      },
+      {
+        "comsol_variable": "pdot",
+        "meaning": "effective plastic strain rate",
+        "source": "Eq. (12)",
+        "source_symbol": "\\dot{\\varepsilon}^{p}",
+        "units": "1/s"
+      },
+      {
+        "comsol_variable": "nu",
+        "meaning": "Poisson ratio",
+        "source": "printed p.4357",
+        "source_symbol": "\\nu",
+        "units": "1"
+      },
+      {
+        "comsol_variable": "sigma_Y_over_E",
+        "meaning": "normalized yield stress",
+        "source": "printed p.4357",
+        "source_symbol": "\\sigma_Y/E",
+        "units": "1"
+      },
+      {
+        "comsol_variable": "B_case",
+        "meaning": "logistic phase-front sharpness",
+        "source": "Eq. (5), Fig. 2, Fig. 4",
+        "source_symbol": "B",
+        "units": "1"
+      },
+      {
+        "comsol_variable": "mvis",
+        "meaning": "rate-sensitivity exponent",
+        "source": "Eq. (12)",
+        "source_symbol": "m",
+        "units": "1"
+      }
+    ],
+    "output_mph": "Huang2013PaperConstitutive_built.mph",
+    "parameters": [
+      {
+        "description": "declared branch selector: 1 single phase, 2 two-phase isotropic, 3 two-phase radial-only",
+        "expression": "1",
+        "name": "case_id",
+        "source": "declared branch selector",
+        "source_symbol": "case_id",
+        "units": "1"
+      },
+      {
+        "description": "Poisson ratio",
+        "expression": "0.3",
+        "name": "nu",
+        "source": "printed p.4357",
+        "source_symbol": "\\nu",
+        "units": "1"
+      },
+      {
+        "description": "yield stress normalized by Young modulus",
+        "expression": "0.05",
+        "name": "sigma_Y_over_E",
+        "source": "printed p.4357",
+        "source_symbol": "\\sigma_Y/E",
+        "units": "1"
+      },
+      {
+        "description": "dilational radial chemical expansion coefficient",
+        "expression": "0.26",
+        "name": "beta_r",
+        "source": "printed p.4357",
+        "source_symbol": "\\beta_r",
+        "units": "1"
+      },
+      {
+        "description": "dilational hoop chemical expansion coefficient",
+        "expression": "0.26",
+        "name": "beta_theta",
+        "source": "printed p.4357",
+        "source_symbol": "\\beta_\\theta",
+        "units": "1"
+      },
+      {
+        "description": "rate sensitivity exponent",
+        "expression": "0.01",
+        "name": "mvis",
+        "source": "printed p.4357",
+        "source_symbol": "m",
+        "units": "1"
+      },
+      {
+        "description": "effective plastic strain-rate constant",
+        "expression": "0.001",
+        "name": "epdot0",
+        "source": "printed p.4357",
+        "source_symbol": "\\dot{\\varepsilon}^{p}_{0}",
+        "units": "1/s"
+      },
+      {
+        "description": "single-phase logistic sharpness",
+        "expression": "5",
+        "name": "B_single_phase",
+        "source": "printed p.4359",
+        "source_symbol": "B",
+        "units": "1"
+      },
+      {
+        "description": "two-phase logistic sharpness",
+        "expression": "80",
+        "name": "B_two_phase",
+        "source": "printed p.4357",
+        "source_symbol": "B",
+        "units": "1"
+      },
+      {
+        "description": "declared normalized loading interval",
+        "expression": "1",
+        "name": "tfinal",
+        "source": "assumption",
+        "source_symbol": "t_{final}",
+        "units": "s"
+      },
+      {
+        "description": "declared numerical startup time",
+        "expression": "0.02*tfinal",
+        "name": "tramp",
+        "source": "assumption",
+        "source_symbol": "t_{ramp}",
+        "units": "s"
+      },
+      {
+        "description": "axis regularization coordinate",
+        "expression": "1e-8",
+        "name": "xfloor",
+        "source": "assumption",
+        "source_symbol": "x_{floor}",
+        "units": "1"
+      },
+      {
+        "description": "stress-ratio regularization floor",
+        "expression": "1e-14*sigma_Y_over_E",
+        "name": "sefloor",
+        "source": "assumption",
+        "source_symbol": "\\sigma_{e,floor}",
+        "units": "1"
+      },
+      {
+        "description": "radial mesh element count",
+        "expression": "800",
+        "name": "Nelem",
+        "source": "assumption",
+        "source_symbol": "N_{elem}",
+        "units": "1"
+      }
+    ],
+    "pdes": [
+      {
+        "boundaries": [
+          {
+            "selection": "left",
+            "tag": "axis",
+            "value": "0"
+          }
+        ],
+        "dependent_unit": "1",
+        "initial": [
+          {
+            "field": "u",
+            "value": "0"
+          }
+        ],
+        "references_variables": [
+          "sigr_over_E",
+          "sigt_over_E"
+        ],
+        "source_unit": "1",
+        "tag": "w_u",
+        "weak": "x^2*sigr_over_E*test(ux)+2*x*sigt_over_E*test(u)"
+      },
+      {
+        "dependent_unit": "1",
+        "initial": [
+          {
+            "field": "u2",
+            "value": "0"
+          }
+        ],
+        "references_variables": [
+          "epr_rate"
+        ],
+        "source_unit": "1/s",
+        "tag": "w_er",
+        "weak": "test(u2)*(d(u2,t)-epr_rate)"
+      },
+      {
+        "dependent_unit": "1",
+        "initial": [
+          {
+            "field": "u3",
+            "value": "0"
+          }
+        ],
+        "references_variables": [
+          "ept_rate"
+        ],
+        "source_unit": "1/s",
+        "tag": "w_et",
+        "weak": "test(u3)*(d(u3,t)-ept_rate)"
+      },
+      {
+        "dependent_unit": "1",
+        "initial": [
+          {
+            "field": "u4",
+            "value": "0"
+          }
+        ],
+        "references_variables": [
+          "pdot"
+        ],
+        "source_unit": "1/s",
+        "tag": "w_p",
+        "weak": "test(u4)*(d(u4,t)-pdot)"
+      }
+    ],
+    "sweep": {
+      "parameter": "case_id",
+      "study": "param",
+      "tlist": "range(0,0.005,tfinal)",
+      "values": "range(1,1,3)"
+    },
+    "tree_changes": [
+      "Component 1 -> Geometry g1 -> Interval [0,1]",
+      "Component 1 -> Definitions -> Variables v_case, v_aux, v_constitutive",
+      "Component 1 -> Physics -> four Weak Form PDE interfaces for control equations",
+      "Study std1 -> Parametric Sweep case_id over 1..3, then Transient",
+      "One unsolved MPH contains all parameter combinations"
+    ],
+    "variable_groups": [
+      {
+        "tag": "v_case",
+        "variables": [
+          {
+            "description": "case-selected logistic sharpness",
+            "expression": "if(case_id==1,B_single_phase,B_two_phase)",
+            "name": "B_case",
+            "units": "1"
+          },
+          {
+            "description": "case-selected radial chemical expansion coefficient",
+            "expression": "if(case_id==3,1,beta_r)",
+            "name": "betaR_case",
+            "units": "1"
+          },
+          {
+            "description": "case-selected hoop chemical expansion coefficient",
+            "expression": "if(case_id==3,0,beta_theta)",
+            "name": "betaT_case",
+            "units": "1"
+          }
+        ]
+      },
+      {
+        "tag": "v_aux",
+        "variables": [
+          {
+            "description": "initial phase-boundary position",
+            "expression": "1+8/B_case",
+            "name": "rc0_case",
+            "units": "1"
+          },
+          {
+            "description": "final phase-boundary position",
+            "expression": "-8/B_case",
+            "name": "rc1_case",
+            "units": "1"
+          },
+          {
+            "description": "moving logistic concentration front",
+            "expression": "rc0_case+(rc1_case-rc0_case)*min(t/tfinal,1)",
+            "name": "front",
+            "units": "1"
+          },
+          {
+            "description": "smooth numerical startup factor",
+            "expression": "t^2/(t^2+tramp^2)",
+            "name": "startup",
+            "units": "1"
+          },
+          {
+            "description": "normalized Li concentration profile",
+            "expression": "startup/(1+exp(-B_case*(x-front)))",
+            "name": "c",
+            "units": "1"
+          }
+        ]
+      },
+      {
+        "tag": "v_constitutive",
+        "variables": [
+          {
+            "description": "radial chemical strain from Eq. (7)",
+            "expression": "betaR_case*c",
+            "name": "ecr",
+            "units": "1"
+          },
+          {
+            "description": "hoop chemical strain from Eq. (7)",
+            "expression": "betaT_case*c",
+            "name": "ect",
+            "units": "1"
+          },
+          {
+            "description": "radial elastic strain from Eq. (1)",
+            "expression": "ux-ecr-u2",
+            "name": "er",
+            "units": "1"
+          },
+          {
+            "description": "hoop elastic strain from Eq. (6) with axis regularization",
+            "expression": "if(x>xfloor,u/x-ect-u3,ux-ect-u3)",
+            "name": "et",
+            "units": "1"
+          },
+          {
+            "description": "isotropic elasticity prefactor from Eq. (8)",
+            "expression": "1/((1+nu)*(1-2*nu))",
+            "name": "coef",
+            "units": "1"
+          },
+          {
+            "description": "radial stress normalized by E from Eq. (8)",
+            "expression": "coef*((1-nu)*er+2*nu*et)",
+            "name": "sigr_over_E",
+            "units": "1"
+          },
+          {
+            "description": "hoop stress normalized by E from Eq. (8)",
+            "expression": "coef*(et+nu*er)",
+            "name": "sigt_over_E",
+            "units": "1"
+          },
+          {
+            "description": "spherical effective stress from Eq. (11)",
+            "expression": "abs(sigr_over_E-sigt_over_E)",
+            "name": "mises_over_E",
+            "units": "1"
+          },
+          {
+            "description": "regularized effective stress used in Eq. (12)",
+            "expression": "max(abs(sigr_over_E-sigt_over_E),sefloor)",
+            "name": "se_over_E",
+            "units": "1"
+          },
+          {
+            "description": "radial J2 flow direction from Eqs. (9)-(10)",
+            "expression": "(sigr_over_E-sigt_over_E)/se_over_E",
+            "name": "flow",
+            "units": "1"
+          },
+          {
+            "description": "effective plastic strain rate from Eq. (12)",
+            "expression": "epdot0*(se_over_E/sigma_Y_over_E)^(1/mvis)",
+            "name": "pdot",
+            "units": "1/s"
+          },
+          {
+            "description": "radial plastic strain rate from Eq. (9)",
+            "expression": "pdot*flow",
+            "name": "epr_rate",
+            "units": "1/s"
+          },
+          {
+            "description": "hoop plastic strain rate from Eq. (9)",
+            "expression": "-0.5*pdot*flow",
+            "name": "ept_rate",
+            "units": "1/s"
+          }
+        ]
+      }
+    ]
+  },
+  "paper_id": "huang2013_lithiation",
+  "parameters": [
+    {
+      "comsol_name": "nu",
+      "meaning": "Poisson ratio",
+      "page": 4,
+      "quote": "materials such as Si—yield stress rY = 0.05E and Poisson’s",
+      "source_symbol": "\\nu",
+      "status": "reported",
+      "units": "1",
+      "value": 0.3
+    },
+    {
+      "comsol_name": "sigma_Y_over_E",
+      "meaning": "yield stress normalized by Young's modulus",
+      "page": 4,
+      "quote": "materials such as Si—yield stress rY = 0.05E and Poisson’s",
+      "source_symbol": "\\sigma_Y/E",
+      "status": "reported",
+      "units": "1",
+      "value": 0.05
+    },
+    {
+      "comsol_name": "beta_r",
+      "meaning": "dilational radial lithiation expansion coefficient",
+      "page": 4,
+      "quote": "expansion coefficients br = bh = bu = 0.26 yields a volume",
+      "source_symbol": "\\beta_r",
+      "status": "reported",
+      "units": "1",
+      "value": 0.26
+    },
+    {
+      "comsol_name": "beta_theta",
+      "meaning": "dilational hoop lithiation expansion coefficient",
+      "page": 4,
+      "quote": "expansion coefficients br = bh = bu = 0.26 yields a volume",
+      "source_symbol": "\\beta_\\theta",
+      "status": "reported",
+      "units": "1",
+      "value": 0.26
+    },
+    {
+      "comsol_name": "beta_phi",
+      "meaning": "dilational azimuthal lithiation expansion coefficient",
+      "page": 4,
+      "quote": "expansion coefficients br = bh = bu = 0.26 yields a volume",
+      "source_symbol": "\\beta_\\phi",
+      "status": "reported",
+      "units": "1",
+      "value": 0.26
+    },
+    {
+      "comsol_name": "mvis",
+      "meaning": "rate-sensitivity exponent",
+      "page": 4,
+      "quote": "In addition, the rate sensitivity exponent m = 0.01 is taken",
+      "source_symbol": "m",
+      "status": "reported",
+      "units": "1",
+      "value": 0.01
+    },
+    {
+      "comsol_name": "epdot0",
+      "meaning": "effective plastic strain-rate constant",
+      "page": 4,
+      "quote": "0 ¼ 0:001. Notably, the radial stress rr",
+      "source_symbol": "\\dot{\\varepsilon}^{p}_{0}",
+      "status": "reported",
+      "units": "1/s",
+      "value": 0.001
+    },
+    {
+      "comsol_name": "profile_a",
+      "meaning": "generalized-logistic shape exponent",
+      "page": 3,
+      "quote": "is taken as unity for simpliﬁcation in this work; Q is simi-",
+      "source_symbol": "a",
+      "status": "reported",
+      "units": "1",
+      "value": 1.0
+    },
+    {
+      "comsol_name": "profile_Q",
+      "meaning": "generalized-logistic prefactor",
+      "page": 3,
+      "quote": "is taken as unity for simpliﬁcation in this work; Q is simi-",
+      "source_symbol": "Q",
+      "status": "reported",
+      "units": "1",
+      "value": 1.0
+    },
+    {
+      "comsol_name": "B_two_phase",
+      "meaning": "sharp two-phase interface parameter",
+      "page": 4,
+      "quote": "logistic function of Eq. (5) with B = 80. Since the present",
+      "source_symbol": "B",
+      "status": "reported",
+      "units": "1",
+      "value": 80.0
+    },
+    {
+      "comsol_name": "B_single_phase",
+      "meaning": "smooth single-phase profile parameter",
+      "page": 6,
+      "quote": "radial Li distributions by changing B = 5 in Eq. (5). The",
+      "source_symbol": "B",
+      "status": "reported",
+      "units": "1",
+      "value": 5.0
+    },
+    {
+      "comsol_name": "tfinal",
+      "meaning": "declared normalized loading interval because the paper gives no absolute time law",
+      "page": 4,
+      "quote": "plastic deformation, a simple time law of rc(t) / t is",
+      "source_symbol": "t_{final}",
+      "status": "assumption",
+      "units": "s",
+      "value": 1.0
+    },
+    {
+      "comsol_name": "tramp",
+      "meaning": "declared numerical startup time",
+      "page": 4,
+      "quote": "plastic deformation, a simple time law of rc(t) / t is",
+      "source_symbol": "t_{ramp}",
+      "status": "assumption",
+      "units": "s",
+      "value": 0.02
+    },
+    {
+      "comsol_name": "xfloor",
+      "meaning": "declared axis regularization length",
+      "page": 4,
+      "quote": "zero velocity at the center",
+      "source_symbol": "x_{floor}",
+      "status": "assumption",
+      "units": "1",
+      "value": 1e-08
+    },
+    {
+      "comsol_name": "sefloor",
+      "meaning": "declared regularization floor for the stress ratio",
+      "page": 4,
+      "quote": "In addition, the rate sensitivity exponent m = 0.01 is taken",
+      "source_symbol": "\\sigma_{e,floor}",
+      "status": "assumption",
+      "units": "1",
+      "value": 1e-14
+    },
+    {
+      "comsol_name": "Nelem",
+      "meaning": "declared radial mesh element count",
+      "page": 9,
+      "quote": "Appendix A. Finite element modeling",
+      "source_symbol": "N_{elem}",
+      "status": "assumption",
+      "units": "1",
+      "value": 800
+    }
+  ],
+  "relations": [
+    {
+      "id": "deviatoric-radial",
+      "page": 3,
+      "quote": "where the deviatoric stresses are",
+      "relation": "s_r=2/3*(sigma_r-sigma_theta)",
+      "relation_type": "constitutive",
+      "source_symbols": [
+        "\\sigma_r",
+        "\\sigma_\\theta"
+      ],
+      "target_symbol": "s_r"
+    },
+    {
+      "id": "effective-stress",
+      "page": 3,
+      "quote": "and the effective stress is",
+      "relation": "sigma_e=abs(sigma_r-sigma_theta)",
+      "relation_type": "constitutive",
+      "source_symbols": [
+        "\\sigma_r",
+        "\\sigma_\\theta"
+      ],
+      "target_symbol": "\\sigma_e"
+    },
+    {
+      "id": "dilational-coefficients",
+      "page": 4,
+      "quote": "expansion coefficients br = bh = bu = 0.26 yields a volume",
+      "relation": "beta_r=beta_theta=beta_phi=0.26",
+      "relation_type": "auxiliary",
+      "source_symbols": [
+        "\\beta_r",
+        "\\beta_\\theta",
+        "\\beta_\\phi"
+      ],
+      "target_symbol": "\\beta_{ij}"
+    },
+    {
+      "id": "viscoplastic-rate",
+      "page": 3,
+      "quote": "the effective plastic strain rate is",
+      "relation": "epdot=epdot0*(sigma_e/s)^(1/m)",
+      "relation_type": "constitutive",
+      "source_symbols": [
+        "\\sigma_e",
+        "s",
+        "m",
+        "\\dot{\\varepsilon}^{p}_{0}"
+      ],
+      "target_symbol": "\\dot{\\varepsilon}^{p}"
+    }
+  ],
+  "schema_version": "papersim.extraction_profile.v1",
+  "unit_equations": [
+    {
+      "expected_units": "1/s",
+      "id": "eq1-strain-rate",
+      "term_units": [
+        "1/s",
+        "1/s",
+        "1/s"
+      ]
+    },
+    {
+      "expected_units": "1",
+      "id": "eq5-concentration",
+      "term_units": [
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "expected_units": "Pa",
+      "id": "eq11-stress",
+      "term_units": [
+        "Pa",
+        "Pa",
+        "Pa"
+      ]
+    },
+    {
+      "expected_units": "Pa/m",
+      "id": "eq13-equilibrium",
+      "term_units": [
+        "Pa/m",
+        "Pa/m"
+      ]
+    },
+    {
+      "expected_units": "1/s",
+      "id": "eq14-velocity",
+      "term_units": [
+        "1/s",
+        "1/s"
+      ]
+    },
+    {
+      "expected_units": "Pa",
+      "id": "eq15-traction",
+      "term_units": [
+        "Pa"
+      ]
+    },
+    {
+      "expected_units": "m/s",
+      "id": "eq16-velocity",
+      "term_units": [
+        "m/s"
+      ]
+    },
+    {
+      "expected_units": "1/(m*s)",
+      "id": "eq19-velocity-ode",
+      "term_units": [
+        "1/(m*s)",
+        "1/(m*s)",
+        "1/(m*s)",
+        "1/(m*s)"
+      ]
+    }
+  ]
+}

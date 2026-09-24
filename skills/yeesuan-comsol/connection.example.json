@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "ssh": {
+    "host": "gateway.example.org",
+    "port": 22,
+    "user": "gateway-user",
+    "instance_selection": "1",
+    "instance_id": "",
+    "identity_file": "~/.ssh/remote_comsol_ed25519",
+    "host_key_policy": "strict"
+  },
+  "remote": {
+    "environment_script": "~/remote-comsol/env.sh",
+    "comsol_executable": "~/remote-comsol/bin/comsol",
+    "remote_case_root": "~/papersim_cases"
+  }
+}

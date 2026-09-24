@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "papersim"
+version = "0.2.0"
+description = "Auditable paper and technical-report simulation reproduction"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "PaperSim contributors" },
+]
+keywords = ["reproducibility", "scientific-computing", "comsol", "audit", "simulation"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+  "pydantic>=2.7",
+  "PyYAML>=6",
+  "pexpect>=4.8; platform_system != 'Windows'",
+]
+
+[project.optional-dependencies]
+pdf = ["pymupdf>=1.24", "Pillow>=10"]
+extraction = ["pymupdf>=1.24", "Pillow>=10", "pint>=0.24"]
+test = ["pytest>=8"]
+dev = ["pytest>=8", "pymupdf>=1.24", "Pillow>=10", "pint>=0.24"]
+
+[project.scripts]
+papersim = "papersim.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+markers = [
+  "pdf: requires a real PDF fixture and PyMuPDF",
+  "comsol: requires a real COMSOL or remote-gateway execution environment",
+]
+addopts = "-ra"

@@ -1,0 +1,30 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv/
+*.egg-info/
+build/
+dist/
+*.mph
+*.class
+*.log
+*.csv
+artifacts/
+tmp/
+
+# Secrets and local execution configuration
+.env
+.env.*
+*.pem
+*.key
+*.crt
+known_hosts
+connection.local.json
+comsol_remote.json
+comsol_password
+
+# Local reports and generated assets
+*.html
+!report.html.example
+*_assets/
