@@ -404,10 +404,6 @@ class Engine:
         *,
         backend: str = "comsol",
         solver: SolverBackend | None = None,
-        config: str | Path | None = None,
-        password_file: str | Path | None = None,
-        remote_root: str | None = None,
-        suite: str = "full",
         wait: bool = True,
         poll_seconds: float = 1.0,
         timeout_seconds: float = 7200.0,
@@ -420,17 +416,11 @@ class Engine:
         if selected is None:
             if backend == "fake":
                 selected = FakeSolver()
-            elif backend == "comsol":
-                from .comsol import ComsolBackend
-
-                selected = ComsolBackend(
-                    config=config,
-                    password_file=password_file,
-                    remote_root=remote_root,
-                    suite=suite,
-                )
             else:
-                raise ContractError(f"no solver registered for backend '{backend}'")
+                raise ContractError(
+                    f"no solver registered for backend '{backend}'; "
+                    "construct the external solver adapter and inject it with solvers={...} or solver=..."
+                )
         selected = validate_run_backend(selected)
         run_id = self.workspace.next_id("run", "r")
         model = Model(model_id, self.workspace.object_path("model", model_id), model_record)

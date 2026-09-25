@@ -2,6 +2,18 @@
 
 All notable changes to PaperSim are recorded here.
 
+## [Unreleased]
+
+### Changed
+
+- Added the generic `RemoteExecutor` injection contract.
+- Moved Yeesuan gateway, SSH/SCP, Slurm, and local configuration into `examples/mvp/yeesuan_comsol/`.
+- Removed automatic COMSOL backend construction from `Engine.run`; callers now inject a configured solver.
+- Moved `pexpect` from core dependencies to the optional `remote` extra.
+- COMSOL result export now follows all stored parametric solutions instead of only the last solution.
+- Added reusable Kobayashi sensitivity and export-only Java templates for independent acceptance runs.
+- Added a MkDocs-based end-to-end Kobayashi 1993 MVP case study and a README case overview.
+
 ## [0.2.0] - 2026-09-24
 
 ### Added

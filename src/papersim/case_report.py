@@ -69,6 +69,11 @@ def generate_report(
     failed_checks = [item for item in audit.checks + audit.numerical_checks if not item.passed]
     failed_criteria = [item for item in audit.numerical_checks if not item.passed]
     overall_class = "pass" if not failed_checks else "fail"
+    comparison_metrics = dict(audit.comparison.get("metrics") or {})
+    metric_rows = [
+        (f'<code>{escape(str(name))}</code>', escape(str(value)))
+        for name, value in sorted(comparison_metrics.items(), key=lambda item: str(item[0]))
+    ]
 
     parameter_rows = []
     for item in ir.profile.parameters:
@@ -229,6 +234,7 @@ pre{{white-space:pre-wrap;word-break:break-word;background:#f5f7f7;padding:12px}
 {_table(["Checklist item", "Result"], model_audit_rows)}
 <h2>11. 数值与论文比较</h2>
 {_table(["Check", "Status", "Reason"], numerical_rows) if numerical_rows else '<p class="note">尚未执行数值审计。</p>'}
+{('<h3>评估指标</h3>' + _table(["Metric", "Value"], metric_rows)) if metric_rows else ''}
 <h2>12. 假设、缺口与适用范围</h2>
 <ul>{''.join(f'<li>{escape(item)}</li>' for item in ir.profile.assumptions)}</ul>
 {('<div class="note">' + escape("Open gaps: " + "; ".join(ir.profile.open_gaps)) + '</div>') if ir.profile.open_gaps else ''}

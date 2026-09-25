@@ -71,23 +71,20 @@ src/papersim/application/run/submit.py
 
 `src/papersim/` 下不再创建 `adapters/`、`domain/`、`application/`、`services/` 等按架构分层的目录。不同职责通过模块名和接口区分。
 
-`comsol.py` 是 COMSOL adapter 的唯一模块。COMSOL 连接、实例选择、上传、Slurm 提交、状态查询、日志收集、artifact verification 和 solver backend 都放在这一个模块中，不再拆分 `comsol_remote.py`。
+`comsol.py` 只实现通用 COMSOL adapter，包括模型打包、远程命令编排和 artifact verification。具体网关连接、实例选择、上传、Slurm 提交和本地环境由用户注入的 `RemoteExecutor` 提供；仓库只保留 `examples/mvp/yeesuan_comsol/` 作为可替换样例。
 
-### Skills
+### MVP examples
 
-Skill 也保持扁平：
+站点相关集成不进入 `skills/` 或库源码，只保存在 examples：
 
 ```text
-PaperSim/skills/
-└── yeesuan-comsol/
-    ├── SKILL.md
-    ├── workflow.md
-    ├── comsol_batch.sh
-    ├── comsol_job.slurm
-    └── probe_remote.py
+PaperSim/examples/mvp/yeesuan_comsol/
+├── README.md
+├── adapter.py
+├── yeesuan_executor.py
+├── workflow.md
+└── assets/
 ```
-
-禁止在具体 skill 下继续创建 `references/`、`assets/`、`scripts/` 子目录。
 
 ### Workspace
 
@@ -563,10 +560,10 @@ class SolverBackend(Protocol):
   "solvers": {
     "comsol": {
       "adapter": "comsol",
-      "profile": "~/.config/papersim/comsol_remote.json"
+      "profile": "~/.config/papersim/yeesuan_comsol.json"
     }
   },
-  "skills": ["yeesuan-comsol"]
+  "examples": {"yeesuan_comsol": "examples/mvp/yeesuan_comsol"}
 }
 ```
 
@@ -693,24 +690,25 @@ COMSOL adapter 负责：
 - 输出收集和验证；
 - 无法翻译时返回 `UnsupportedModel` 或 `TranslationGap`。
 
-### 9.1 Yeesuan COMSOL skill
+### 9.1 Yeesuan COMSOL MVP 样例
 
-Yeesuan COMSOL 连接方式按 PaperEngine 的 skill 模式维护，并迁入 PaperSim 自己的 skill 目录；连接步骤不得散落在 prompt、README 或 case 脚本中。
+Yeesuan COMSOL 连接方式只作为可删除、可替换的 MVP 样例维护；PaperSim 库不定义站点、网关、账号、实例、密钥或调度参数。
 
 绝对位置：
 
 ```text
-/path/to/PaperSim/skills/yeesuan-comsol/
-├── SKILL.md
+/path/to/PaperSim/examples/mvp/yeesuan_comsol/
+├── README.md
+├── adapter.py
+├── yeesuan_executor.py
 ├── workflow.md
 ├── comsol_batch.sh
 ├── comsol_job.slurm
 └── probe_remote.py
 ```
 
-该目录只放文件，不再创建 `references/`、`assets/` 或 `scripts/` 子目录。
 
-Skill 必须覆盖：
+MVP 样例必须覆盖：
 
 - gateway host、port、account、instance selection 和 host-key policy；
 - 当前 CPU instance、remote user、environment script、COMSOL executable 和 version；
@@ -727,11 +725,11 @@ Skill 必须覆盖：
 凭据和连接配置不得进入 PaperSim 仓库：
 
 ```text
-~/.config/yeesuan/comsol_password
-~/.config/papersim/comsol_remote.json
+~/.config/papersim/yeesuan_password
+~/.config/papersim/yeesuan_comsol.json
 ```
 
-代码层由 `papersim/comsol.py` 实现同一连接合同；skill 负责让 current Agent 安全操作和排障，`comsol.py` 负责可重复的库调用。两者共享一套契约和验证规则，不维护两份连接逻辑。
+库只定义 `SolverBackend` 和 `RemoteExecutor` 接口；`ComsolBackend` 消费用户注入的 executor。Yeesuan 的 SSH/SCP、实例选择、Slurm 和本地配置全部位于 `examples/mvp/yeesuan_comsol/`，不进入库代码。
 
 ### 9.2 MVP 使用方式
 
@@ -746,7 +744,7 @@ paper/original/Kobayashi1993A__<title>.pdf
 -> engine.assess gives reliability verdict
 ```
 
-COMSOL 运行必须通过 Yeesuan skill 连接，不得复制 password，不得把 SSH/SCP 逻辑写入具体论文脚本。
+COMSOL 运行必须通过用户注入的 external solver executor 连接；不得把 SSH/SCP 逻辑写入具体论文脚本。
 
 ### 9.3 COMSOL 连接定义与库解耦
 
@@ -761,7 +759,7 @@ PaperSim/src/papersim/comsol.py
 环境相关信息不写入库：
 
 ```text
-~/.config/papersim/comsol_remote.json
+~/.config/papersim/yeesuan_comsol.json
 ```
 
 该 profile 定义：
@@ -776,7 +774,7 @@ PaperSim/src/papersim/comsol.py
 密码只放在：
 
 ```text
-~/.config/yeesuan/comsol_password
+~/.config/papersim/yeesuan_password
 ```
 
 权限必须为 `0600`，不得进入 profile、仓库、日志或 Agent 上下文。
@@ -888,7 +886,7 @@ Case
 6. 实现 `compare`。
 7. 实现 `model(parent=...)` 和迭代链。
 8. 实现 `assess`。
-9. 编写扁平的 `skills/yeesuan-comsol/`，不创建 references/assets/scripts 子目录。
+9. 将 Yeesuan 连接实现保留在 `examples/mvp/yeesuan_comsol/`，不纳入 PaperSim 库接口。
 10. 在扁平的 `comsol.py` 中接入 COMSOL adapter，并让 current Agent 按 skill 完成 Kobayashi1993A MVP。
 11. 接入 current Agent 作为第一个 `AgentAdapter`，并实现 host profile 加载和启动握手。
 12. 最后处理 legacy importer 和数据迁移。

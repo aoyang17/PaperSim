@@ -63,6 +63,22 @@ class ArtifactRef:
 
 
 @dataclass(frozen=True)
+class RemoteResult:
+    """Result returned by an externally supplied solver executor."""
+
+    command: str
+    returncode: int
+    output: str
+
+    @property
+    def ok(self) -> bool:
+        return self.returncode == 0
+
+    def as_dict(self) -> dict[str, Any]:
+        return {"ok": self.ok, "returncode": self.returncode, "output": self.output}
+
+
+@dataclass(frozen=True)
 class AgentTask:
     """Typed task submitted by Engine to an injected AgentAdapter."""
 
@@ -114,4 +130,27 @@ class SolverBackend(Protocol):
         ...
 
     def collect(self, run_id: str, workdir: Any) -> Mapping[str, Any]:
+        ...
+
+
+@runtime_checkable
+class RemoteExecutor(Protocol):
+    """User-supplied transport for a remote solver.
+
+    PaperSim defines this interface but does not define gateway URLs, instance
+    identifiers, credentials, schedulers, or site-specific paths. Users inject
+    their own implementation when constructing a solver backend.
+    """
+
+    def run(self, command: str, *, timeout: int = 60) -> RemoteResult:
+        ...
+
+    def upload(self, local_path: Any, remote_path: str, *, timeout: int = 1800) -> RemoteResult:
+        ...
+
+    def download(self, remote_path: str, local_path: Any, *, timeout: int = 1800) -> RemoteResult:
+        ...
+
+    def describe(self) -> Mapping[str, Any]:
+        """Return non-secret execution metadata recorded with the run."""
         ...

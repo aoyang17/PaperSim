@@ -16,6 +16,8 @@ def test_generated_build_and_solve_are_separated(synthetic_case):
     assert build_text.count(".save(") == 1
     assert "public final class Kobayashi1993DendriteSolve" in solve_text
     assert '.study("std1").run()' in solve_text
+    assert '.set("data", "dset2")' in solve_text
+    assert '"export-only".equals(args[0])' in solve_text
     assert ".param().set(" not in solve_text
     for parameter in ir.profile.parameters:
         assert parameter.comsol_name in build_text

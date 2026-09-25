@@ -301,4 +301,14 @@ class CaseWorkflow:
             links["built MPH"] = layout.built_mph(iteration).name
         if layout.solved_mph(iteration).is_file():
             links["solved MPH"] = layout.solved_mph(iteration).name
+        assets = layout.assets(iteration)
+        for label, path in (
+            ("metrics", assets / "metrics.json"),
+            ("global export", assets / "iter001_global_all.csv"),
+            ("Fig. 7 comparison", assets / "fig7_masks" / "fig7_paper_vs_comsol.png"),
+            ("Fig. 7 reference masks", assets / "fig7_reference"),
+            ("evidence logs", assets / "iter001_evidence_logs.tar.gz"),
+        ):
+            if path.is_file() or path.is_dir():
+                links[label] = path.relative_to(layout.directory).as_posix()
         return generate_report(manifest, ir, record, output=layout.report, artifact_links=links)

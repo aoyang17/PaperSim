@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from papersim.case_numeric import assess, audit_numeric, criterion_pass, parse_tidy_csv, summarize_rows
+from papersim.case_numeric import assess, audit_numeric, criterion_pass, parse_comsol_table_csv, parse_tidy_csv, summarize_rows
 from papersim.case_report import generate_report
 from papersim.case_contracts import IterationState
 
@@ -31,6 +31,21 @@ def test_criterion_evaluation_and_tidy_csv():
     assert rows[0]["metric"] == "tipY"
     summary = summarize_rows(rows)
     assert summary["time.max"] == 1.4
+
+
+def test_comsol_combined_parametric_csv_is_normalized():
+    text = (
+        "% Model,iter001_solved.mph\n"
+        "% delta,Time (s),tipY\n"
+        "0,0,0.15\n"
+        "0,1.4,4.83\n"
+        "0.05,1.4,8.94\n"
+    )
+    rows = parse_comsol_table_csv(text)
+    assert len(rows) == 3
+    assert rows[0]["delta"] == 0.0
+    assert rows[-1]["metric"] == "tipY"
+    assert rows[-1]["value"] == 8.94
 
 
 def test_numeric_audit_and_assessment(synthetic_case):

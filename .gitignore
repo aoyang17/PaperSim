@@ -6,6 +6,7 @@ __pycache__/
 *.egg-info/
 build/
 dist/
+site/
 *.mph
 *.class
 *.log
@@ -23,6 +24,10 @@ known_hosts
 connection.local.json
 comsol_remote.json
 comsol_password
+yeesuan_comsol.json
+yeesuan_password
+examples/mvp/yeesuan_comsol/*.local.json
+examples/mvp/yeesuan_comsol/*.local.env
 
 # Local reports and generated assets
 *.html

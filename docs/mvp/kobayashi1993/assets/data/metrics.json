@@ -1,0 +1,142 @@
+{
+  "time.max": 1.4000000000000001,
+  "quality.p_min": -3.6440141084442486e-06,
+  "quality.p_max": 1.0000017967303318,
+  "quality.max_relative_enthalpy_drift": 1.9620553702391651e-13,
+  "convergence.mesh_tip_relative_difference": 0.003536067892503586,
+  "convergence.timestep_tip_relative_difference": 0.0,
+  "convergence.seed_tip_relative_range": 0.002114164904862659,
+  "paper_trend.delta050_to_delta000_tip_ratio": 1.850931677018633,
+  "paper_trend.delta050_vertical_to_horizontal_extent_ratio": 2.0135135135135136,
+  "paper_figure.fig7_mean_iou": 0.3282936401370114,
+  "paper_figure.fig7_normalized_chamfer": 0.026200561502855626,
+  "fig7_panels": [
+    {
+      "delta": 0.0,
+      "time": 0.2,
+      "iou": 0.40115718418514945,
+      "normalized_chamfer": 0.04823871143322986
+    },
+    {
+      "delta": 0.0,
+      "time": 0.8,
+      "iou": 0.4042991755005889,
+      "normalized_chamfer": 0.017078934127701492
+    },
+    {
+      "delta": 0.0,
+      "time": 1.4,
+      "iou": 0.3566227730441518,
+      "normalized_chamfer": 0.01723026182208834
+    },
+    {
+      "delta": 0.005,
+      "time": 0.2,
+      "iou": 0.32661290322580644,
+      "normalized_chamfer": 0.04359833661411585
+    },
+    {
+      "delta": 0.005,
+      "time": 0.8,
+      "iou": 0.32018479033404407,
+      "normalized_chamfer": 0.01695522946434105
+    },
+    {
+      "delta": 0.005,
+      "time": 1.4,
+      "iou": 0.36126397004595223,
+      "normalized_chamfer": 0.023534888287018652
+    },
+    {
+      "delta": 0.01,
+      "time": 0.2,
+      "iou": 0.3472762645914397,
+      "normalized_chamfer": 0.03828025563061537
+    },
+    {
+      "delta": 0.01,
+      "time": 0.8,
+      "iou": 0.3626849894291755,
+      "normalized_chamfer": 0.014255769558018777
+    },
+    {
+      "delta": 0.01,
+      "time": 1.4,
+      "iou": 0.3546505977257265,
+      "normalized_chamfer": 0.020129991958816252
+    },
+    {
+      "delta": 0.02,
+      "time": 0.2,
+      "iou": 0.2874779541446208,
+      "normalized_chamfer": 0.03287493041852401
+    },
+    {
+      "delta": 0.02,
+      "time": 0.8,
+      "iou": 0.2673232807460995,
+      "normalized_chamfer": 0.05169612906583784
+    },
+    {
+      "delta": 0.02,
+      "time": 1.4,
+      "iou": 0.3203370645201861,
+      "normalized_chamfer": 0.01668110617458349
+    },
+    {
+      "delta": 0.05,
+      "time": 0.2,
+      "iou": 0.28132832080200504,
+      "normalized_chamfer": 0.015819359566351936
+    },
+    {
+      "delta": 0.05,
+      "time": 0.8,
+      "iou": 0.24404391961881086,
+      "normalized_chamfer": 0.017955256744629142
+    },
+    {
+      "delta": 0.05,
+      "time": 1.4,
+      "iou": 0.28914141414141414,
+      "normalized_chamfer": 0.018679261676962357
+    }
+  ],
+  "baseline_history_metrics": {
+    "0.0": {
+      "p_min": -3.25763970732956e-06,
+      "p_max": 1.0000009747965837,
+      "max_relative_enthalpy_drift": 1.1491680898435346e-13,
+      "tip_final": 4.830000000000001,
+      "half_width_final": 4.200000000000001
+    },
+    "0.005": {
+      "p_min": -3.2965748651127953e-06,
+      "p_max": 1.0000010377564805,
+      "max_relative_enthalpy_drift": 1.2095481081234491e-13,
+      "tip_final": 8.415,
+      "half_width_final": 4.335
+    },
+    "0.01": {
+      "p_min": -3.335462921048529e-06,
+      "p_max": 1.0000011009868044,
+      "max_relative_enthalpy_drift": 1.0848925865133027e-13,
+      "tip_final": 8.880000000000003,
+      "half_width_final": 4.380000000000003
+    },
+    "0.02": {
+      "p_min": -3.413063190662239e-06,
+      "p_max": 1.0000012283455724,
+      "max_relative_enthalpy_drift": 8.920660765226081e-14,
+      "tip_final": 8.88,
+      "half_width_final": 4.41
+    },
+    "0.05": {
+      "p_min": -3.6440141084442486e-06,
+      "p_max": 1.000001619301085,
+      "max_relative_enthalpy_drift": 9.115435017741924e-14,
+      "tip_final": 8.94,
+      "half_width_final": 4.4399999999999995
+    }
+  }
+}

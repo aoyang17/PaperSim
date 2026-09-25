@@ -335,7 +335,7 @@ third_party/paper-search-mcp/pyproject.toml
 - 核心依赖只保留读、写、schema、CLI 所需包；
 - PDF、vision、simulation、remote、test 分开为 optional extras；
 - paper ingest 可选 provider 不进入 core，也不 vendored；必要时通过外部进程或 HTTP 接入；
-- COMSOL remote 依赖 `pexpect` 仅放在 `comsol`/`remote` extra；
+- COMSOL remote 依赖 `pexpect` 仅放在可选 `remote` extra；具体网关实现放在 MVP example；
 - 测试依赖不进入 runtime；
 - 所有外部 backend 必须记录版本、health check 和输出 schema；
 - 不在 package 中携带 API key、SSH 配置或私有路径。

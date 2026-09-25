@@ -243,7 +243,7 @@ class MeshSpec(StrictModel):
 
 class SolverSpec(StrictModel):
     id: str = Field(default="solver1")
-    backend: Literal["comsol", "fake"]
+    backend: str = Field(min_length=1)
     version: str = Field(min_length=1)
     settings: dict[str, Any]
     source: SourceKind = SourceKind.NUMERICS

@@ -5,7 +5,9 @@ import os
 from pathlib import Path
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -13,10 +15,17 @@ sys.path.insert(0, str(ROOT / "src"))
 import pytest
 
 from papersim import Engine
-from papersim.comsol import ComsolBackend, ComsolConfig, ComsolRemoteAgent
-from papersim.contracts import AgentAdapter, AgentResult, AgentTask, ContractError, TranslationGap
+from papersim.case_contracts import SolverSpec
+from papersim.comsol import ComsolBackend
+from papersim.contracts import AgentAdapter, AgentResult, AgentTask, ContractError, RemoteResult, TranslationGap
 from papersim.run import FakeSolver
 from papersim.store import StoreError, Workspace, validate_object
+
+EXAMPLE_DIR = ROOT / "examples" / "mvp" / "yeesuan_comsol"
+sys.path.insert(0, str(EXAMPLE_DIR))
+
+from adapter import build_backend
+from yeesuan_executor import YeesuanConfig, YeesuanExecutor
 
 
 MODEL_SECTIONS = (
@@ -144,6 +153,27 @@ class DummyWorkflowAgent(AgentAdapter):
                 },
             )
         return AgentResult(kind=task.kind, status="error", message="unsupported")
+
+
+class DummyRemoteExecutor:
+    def __init__(self, description: dict | None = None) -> None:
+        self.calls: list[tuple] = []
+        self.description = description or {"executor": "dummy", "solver_version": "test"}
+
+    def run(self, command: str, *, timeout: int = 60) -> RemoteResult:
+        self.calls.append(("run", command, timeout))
+        return RemoteResult(command=command, returncode=0, output="")
+
+    def upload(self, local_path, remote_path: str, *, timeout: int = 1800) -> RemoteResult:
+        self.calls.append(("upload", str(local_path), remote_path, timeout))
+        return RemoteResult(command="scp", returncode=0, output="")
+
+    def download(self, remote_path: str, local_path, *, timeout: int = 1800) -> RemoteResult:
+        self.calls.append(("download", remote_path, str(local_path), timeout))
+        return RemoteResult(command="scp", returncode=0, output="")
+
+    def describe(self) -> dict:
+        return dict(self.description)
 
 
 class PapersimContractTests(unittest.TestCase):
@@ -390,7 +420,7 @@ class PapersimContractTests(unittest.TestCase):
         with self.assertRaises(StoreError):
             Workspace(self.workspace).validate_all()
 
-    def test_comsol_identity_file_enables_publickey_auth(self) -> None:
+    def test_yeesuan_mvp_identity_file_enables_legacy_publickey_auth(self) -> None:
         root = Path(self.temp.name)
         identity = root / "remote_key"
         identity.write_text("test-key", encoding="utf-8")
@@ -410,27 +440,70 @@ class PapersimContractTests(unittest.TestCase):
             ),
             encoding="utf-8",
         )
-        backend = ComsolBackend(config=config, password_file=config, suite="full")
-        options = ComsolRemoteAgent(backend.config, config)._auth_options()
+        executor = YeesuanExecutor(YeesuanConfig.load(config), config)
+        options = executor._auth_options()
         self.assertEqual(options[:2], ["-i", str(identity)])
         self.assertIn("PreferredAuthentications=publickey,keyboard-interactive", options)
 
-    def test_comsol_backend_requires_a_translatable_model(self) -> None:
-        case = self.case()
-        model = self.engine.model(case.id, source=self.draft(backend="comsol"))
-        config = Path(self.temp.name) / "comsol.json"
+    def test_yeesuan_mvp_direct_instance_identity_uses_batch_publickey_auth(self) -> None:
+        root = Path(self.temp.name)
+        identity = root / "remote_key"
+        identity.write_text("test-key", encoding="utf-8")
+        config = root / "comsol-direct.json"
         config.write_text(
             json.dumps(
                 {
-                    "ssh": {"host": "example", "port": 22, "user": "u", "instance_selection": "1"},
+                    "ssh": {
+                        "host": "example",
+                        "port": 22,
+                        "user": "u",
+                        "instance_selection": "1",
+                        "instance_id": "12345",
+                        "identity_file": str(identity),
+                    },
                     "remote": {"environment_script": "~/env.sh"},
                 }
             ),
             encoding="utf-8",
         )
-        backend = ComsolBackend(config=config, password_file=config, suite="full")
+        executor = YeesuanExecutor(YeesuanConfig.load(config))
+        options = executor._auth_options()
+        self.assertEqual(executor._login_user(), "u::12345")
+        self.assertIn("BatchMode=yes", options)
+        self.assertIn("KbdInteractiveAuthentication=no", options)
+        self.assertIn("PreferredAuthentications=publickey", options)
+
+        completed = SimpleNamespace(returncode=0, stdout="remote-host\n", stderr="")
+        with patch("yeesuan_executor.subprocess.run", return_value=completed) as run:
+            result = executor.run("hostname", timeout=5)
+        self.assertTrue(result.ok)
+        self.assertEqual(result.output, "remote-host")
+        command = run.call_args.args[0]
+        self.assertEqual(command[0], "ssh")
+        self.assertIn("u::12345@example", command)
+        self.assertTrue(command[-1].endswith("&& hostname"))
+
+        solver = build_backend(config=config)
+        self.assertIsInstance(solver, ComsolBackend)
+        self.assertEqual(solver.remote_root, "~/papersim_cases")
+        self.assertEqual(solver.solver_version, "6.4")
+
+    def test_comsol_backend_requires_a_translatable_model(self) -> None:
+        case = self.case()
+        model = self.engine.model(case.id, source=self.draft(backend="comsol"))
+        backend = ComsolBackend(DummyRemoteExecutor(), remote_root="/tmp/remote", suite="full")
         with self.assertRaises(TranslationGap):
             backend.validate(model)
+
+    def test_engine_requires_external_solver_injection(self) -> None:
+        case = self.case()
+        model = self.engine.model(case.id, source=self.draft(backend="comsol"))
+        with self.assertRaisesRegex(ContractError, "no solver registered"):
+            self.engine.run(model.id, backend="comsol")
+
+    def test_case_contract_accepts_user_defined_solver_backend_name(self) -> None:
+        spec = SolverSpec(backend="custom-external", version="1.0", settings={})
+        self.assertEqual(spec.backend, "custom-external")
 
 
 if __name__ == "__main__":

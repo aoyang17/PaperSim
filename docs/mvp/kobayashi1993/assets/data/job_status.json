@@ -1,0 +1,56 @@
+{
+  "parameter_sweep": {
+    "job_id": "82149",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "02:36:54",
+    "end": "2026-09-24T12:58:59"
+  },
+  "export_probe": {
+    "job_id": "83772",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:01:03"
+  },
+  "export_all": {
+    "job_id": "83787",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:54"
+  },
+  "control_delta020": {
+    "job_id": "83779",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:13:28",
+    "end": "2026-09-25T11:14:25"
+  },
+  "mesh_fine": {
+    "job_id": "83780",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:27:26",
+    "end": "2026-09-25T11:29:06"
+  },
+  "timestep_fine": {
+    "job_id": "83781",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:21:56",
+    "end": "2026-09-25T11:23:37"
+  },
+  "seed_small": {
+    "job_id": "83782",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:13:04",
+    "end": "2026-09-25T11:14:45"
+  },
+  "seed_large": {
+    "job_id": "83783",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:11:28",
+    "end": "2026-09-25T11:13:09"
+  }
+}

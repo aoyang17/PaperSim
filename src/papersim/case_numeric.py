@@ -98,17 +98,27 @@ def parse_comsol_table_csv(text: str) -> list[dict[str, Any]]:
     header_index = None
     for index, line in enumerate(lines):
         stripped = line.lstrip("%").strip()
-        if "," in stripped and not stripped.lower().startswith(("model", "version", "date", "dimension")):
+        if "," not in stripped:
+            continue
+        candidate = [item.strip().lstrip("%").strip().lower() for item in next(csv.reader([stripped]))]
+        if "delta" in candidate and any(item in {"t", "time"} or item.startswith("time (") for item in candidate):
             header_index = index
             break
     if header_index is None:
         raise ContractError("could not find a CSV header in the COMSOL export")
     reader = csv.reader(lines[header_index:], skipinitialspace=True)
-    header = [item.strip() for item in next(reader)]
+    header = [item.strip().lstrip("%").strip() for item in next(reader)]
     rows = [dict(zip(header, row)) for row in reader if row]
     if "delta" not in header:
         raise ContractError("COMSOL export does not contain a delta parameter column")
-    time_column = next((item for item in header if item.lower() in {"t", "time"}), None)
+    time_column = next(
+        (
+            item
+            for item in header
+            if item.lower() in {"t", "time"} or item.lower().startswith("time (")
+        ),
+        None,
+    )
     if time_column is None:
         raise ContractError("COMSOL export does not contain a time column")
     metric_columns = [item for item in header if item not in {"delta", time_column}]

@@ -1,0 +1,139 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+ROOT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
+ENV_FILE="${YEESUAN_ENV_FILE:-$HOME/.config/papersim/yeesuan_mvp.env}"
+if [[ -f "$ENV_FILE" ]]; then
+  # shellcheck disable=SC1090
+  source "$ENV_FILE"
+fi
+
+CONFIG="${YEESUAN_CONFIG:-$HOME/.config/papersim/yeesuan_comsol.json}"
+PASSWORD_FILE="${YEESUAN_PASSWORD_FILE:-$HOME/.config/papersim/yeesuan_password}"
+IDENTITY_FILE="${YEESUAN_IDENTITY_FILE:-$HOME/.ssh/remote_comsol_ed25519}"
+REPO_ROOT="$(cd "$ROOT_DIR/../../../.." && pwd)"
+PAPERSIM_SRC="${PAPERSIM_SRC:-$REPO_ROOT/src}"
+PYTHON_BIN="${YEESUAN_PYTHON:-python3}"
+if [[ ! -x "$PYTHON_BIN" ]]; then
+  RESOLVED_PYTHON="$(command -v "$PYTHON_BIN" 2>/dev/null || true)"
+  if [[ -n "$RESOLVED_PYTHON" ]]; then
+    PYTHON_BIN="$RESOLVED_PYTHON"
+  else
+    PYTHON_BIN="${PYTHON_BIN_FALLBACK:-python3}"
+  fi
+fi
+HELPER="$ROOT_DIR/yeesuan_remote.py"
+export PAPERSIM_SRC
+
+usage() {
+  cat <<'EOF'
+Usage:
+  yeesuan-comsol check
+  yeesuan-comsol probe
+  yeesuan-comsol shell
+  yeesuan-comsol run -- <remote command>
+  yeesuan-comsol mkdir <remote-dir>
+  yeesuan-comsol upload <local> <remote>
+  yeesuan-comsol download <remote> <local>
+  yeesuan-comsol submit <remote-project-root> [slurm-script]
+  yeesuan-comsol status <job-id>
+  yeesuan-comsol tail <remote-file> [--lines N]
+  yeesuan-comsol key-show
+  yeesuan-comsol key-init
+
+Canonical non-secret environment file:
+  ~/.config/papersim/yeesuan_mvp.env
+EOF
+}
+
+require_helper() {
+  [[ -f "$HELPER" ]] || { echo "missing helper: $HELPER" >&2; exit 2; }
+  [[ -x "$PYTHON_BIN" ]] || { echo "python is not executable: $PYTHON_BIN" >&2; exit 2; }
+}
+
+case "${1:-}" in
+  check)
+    require_helper
+    "$PYTHON_BIN" "$HELPER" --config "$CONFIG" --password-file "$PASSWORD_FILE" check
+    ;;
+  probe)
+    require_helper
+    exec "$PYTHON_BIN" "$HELPER" --config "$CONFIG" --password-file "$PASSWORD_FILE" --timeout "${YEESUAN_TIMEOUT:-120}" probe
+    ;;
+  shell)
+    require_helper
+    exec "$PYTHON_BIN" "$HELPER" --config "$CONFIG" --password-file "$PASSWORD_FILE" shell
+    ;;
+  run)
+    require_helper
+    shift
+    [[ "${1:-}" == "--" ]] && shift
+    [[ "$#" -gt 0 ]] || { echo "run requires a remote command" >&2; exit 2; }
+    exec "$PYTHON_BIN" "$HELPER" --config "$CONFIG" --password-file "$PASSWORD_FILE" --timeout "${YEESUAN_TIMEOUT:-120}" run -- "$@"
+    ;;
+  mkdir)
+    require_helper
+    [[ "$#" -eq 2 ]] || { usage; exit 2; }
+    exec "$PYTHON_BIN" "$HELPER" --config "$CONFIG" --password-file "$PASSWORD_FILE" mkdir "$2"
+    ;;
+  upload)
+    require_helper
+    [[ "$#" -eq 3 ]] || { usage; exit 2; }
+    exec "$PYTHON_BIN" "$HELPER" --config "$CONFIG" --password-file "$PASSWORD_FILE" --timeout "${YEESUAN_TIMEOUT:-1800}" upload "$2" "$3"
+    ;;
+  download)
+    require_helper
+    [[ "$#" -eq 3 ]] || { usage; exit 2; }
+    exec "$PYTHON_BIN" "$HELPER" --config "$CONFIG" --password-file "$PASSWORD_FILE" --timeout "${YEESUAN_TIMEOUT:-1800}" download "$2" "$3"
+    ;;
+  submit)
+    require_helper
+    [[ "$#" -ge 2 && "$#" -le 3 ]] || { usage; exit 2; }
+    project="$2"
+    script="${3:-slurm/comsol_job.slurm}"
+    exec "$PYTHON_BIN" "$HELPER" --config "$CONFIG" --password-file "$PASSWORD_FILE" --timeout "${YEESUAN_TIMEOUT:-1800}" submit "$project" "$script"
+    ;;
+  status)
+    require_helper
+    [[ "$#" -eq 2 ]] || { usage; exit 2; }
+    exec "$PYTHON_BIN" "$HELPER" --config "$CONFIG" --password-file "$PASSWORD_FILE" status "$2"
+    ;;
+  tail)
+    require_helper
+    shift
+    [[ "$#" -ge 1 ]] || { usage; exit 2; }
+    exec "$PYTHON_BIN" "$HELPER" --config "$CONFIG" --password-file "$PASSWORD_FILE" tail "$@"
+    ;;
+  key-show)
+    ssh-keygen -lf "${IDENTITY_FILE}.pub"
+    cat "${IDENTITY_FILE}.pub"
+    ;;
+  key-init)
+    mkdir -p "$(dirname "$IDENTITY_FILE")" "$(dirname "$CONFIG")" "$(dirname "$PASSWORD_FILE")"
+    if [[ ! -f "$IDENTITY_FILE" ]]; then
+      ssh-keygen -q -t ed25519 -N '' -C "papersim-remote-$(date -u +%Y%m%d)" -f "$IDENTITY_FILE"
+    fi
+    chmod 600 "$IDENTITY_FILE"
+    chmod 644 "${IDENTITY_FILE}.pub"
+    "$PYTHON_BIN" - "$CONFIG" "$IDENTITY_FILE" <<'PY'
+import json, sys
+from pathlib import Path
+config_path, identity = map(Path, sys.argv[1:3])
+data = json.loads(config_path.read_text(encoding="utf-8")) if config_path.exists() else {"ssh": {}, "remote": {}}
+data.setdefault("ssh", {})["identity_file"] = str(identity)
+config_path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+config_path.chmod(0o600)
+PY
+    echo "Register this public key once with the remote gateway; future connections reuse it automatically:"
+    ssh-keygen -lf "${IDENTITY_FILE}.pub"
+    cat "${IDENTITY_FILE}.pub"
+    ;;
+  ""|-h|--help|help)
+    usage
+    ;;
+  *)
+    usage
+    exit 2
+    ;;
+esac

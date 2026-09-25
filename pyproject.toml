@@ -29,14 +29,15 @@ dependencies = [
   "pydantic>=2.7",
   "PyYAML>=6",
   "pint>=0.24",
-  "pexpect>=4.8; platform_system != 'Windows'",
 ]
 
 [project.optional-dependencies]
 pdf = ["pymupdf>=1.24", "Pillow>=10"]
 extraction = ["pymupdf>=1.24", "Pillow>=10"]
+remote = ["pexpect>=4.8; platform_system != 'Windows'"]
+docs = ["mkdocs>=1.6,<2", "mkdocs-material>=9.5,<10"]
 test = ["pytest>=8"]
-dev = ["pytest>=8", "pymupdf>=1.24", "Pillow>=10"]
+dev = ["pytest>=8", "pymupdf>=1.24", "Pillow>=10", "mkdocs>=1.6,<2", "mkdocs-material>=9.5,<10"]
 
 [project.scripts]
 papersim = "papersim.cli:main"

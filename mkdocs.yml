@@ -1,0 +1,44 @@
+site_name: PaperSim
+site_description: 可审计的论文数值模型复现工具
+site_url: https://aoyang17.github.io/PaperSim/
+repo_url: https://github.com/aoyang17/PaperSim
+repo_name: aoyang17/PaperSim
+
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - toc.follow
+  palette:
+    - scheme: default
+      primary: teal
+      accent: teal
+
+nav:
+  - 首页: index.md
+  - PaperSim 架构: PaperSim_architecture.md
+  - MVP 案例:
+      - 总览: mvp/kobayashi1993/index.md
+      - Paper 到 IR: mvp/kobayashi1993/paper-to-ir.md
+      - IR 到 COMSOL: mvp/kobayashi1993/ir-to-comsol.md
+      - 求解与审计: mvp/kobayashi1993/solve-and-audit.md
+      - 数值审计计划: mvp/kobayashi1993/audit-plan.md
+      - 完整复现步骤: mvp/kobayashi1993/reproduce.md
+  - 参考:
+      - 外部 Solver 接口: reference/external-solver.md
+      - 功能测试矩阵: feature_matrix.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+
+plugins:
+  - search

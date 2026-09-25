@@ -12,7 +12,7 @@ from .case_contracts import (
 from .case_mph import read_mph_snapshot
 from .case_store import CaseLayout, CaseStore
 from .case_workflow import CaseWorkflow
-from .contracts import AgentAdapter, AgentResult, AgentTask, SolverBackend
+from .contracts import AgentAdapter, AgentResult, AgentTask, RemoteExecutor, RemoteResult, SolverBackend
 from .documents import EvidenceRef, PdfDocument
 from .engine import Engine, load_host_profile
 from .extraction import ExtractionBundle, extract_paper, load_extraction_profile
@@ -46,6 +46,8 @@ __all__ = [
     "Model",
     "PdfDocument",
     "ProfileModel",
+    "RemoteExecutor",
+    "RemoteResult",
     "read_mph_snapshot",
     "Run",
     "SCHEMA_VERSION",

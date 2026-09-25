@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "ssh": {
+    "host": "gateway.example.org",
+    "port": 22,
+    "user": "gateway-user",
+    "instance_selection": "1",
+    "instance_id": "replace-with-current-instance-id",
+    "identity_file": "~/.ssh/remote_comsol_ed25519",
+    "host_key_policy": "strict"
+  },
+  "remote": {
+    "environment_script": "~/path/to/comsol-env.sh",
+    "comsol_executable": "~/path/to/comsol",
+    "remote_case_root": "~/path/to/user-owned-cases",
+    "solver_version": "6.4",
+    "partition": "replace-after-sinfo"
+  }
+}

@@ -14,6 +14,8 @@
 | HTML report | `case_report.py` | `tests/features/test_numeric_and_report.py` | external resource, missing nomenclature/audit mapping |
 | Migration | `case_migration.py` | `tests/features/test_migration.py` | target collision, missing source, hash change |
 | End-to-end workflow | `case_workflow.py` | `tests/features/test_case_workflow.py` | any stage bypass or missing artifact |
+| External solver injection | `contracts.py`, `comsol.py`, `engine.py` | `tests/test_papersim_contracts.py` | unregistered backend is not auto-constructed; executor methods are mandatory |
+| All-parametric export | `profiles/templates/kobayashi1993_dendrite_solve.java` | `tests/features/test_java_generation.py` | export must bind to the stored parametric solution dataset |
 
 ## Commands
 

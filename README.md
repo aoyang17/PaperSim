@@ -235,15 +235,9 @@ papersim --workspace /path/to/PaperSimWorkspace report \
 - IR、COMSOL 实现和数值审计；
 - Fig. 7 比较、假设和限定 verdict。
 
-## Kobayashi1993 MVP
+## MVP 案例：Kobayashi 1993 dendrite
 
-首个 MVP Case 为：
-
-```text
-kobayashi1993_dendrite
-```
-
-范围是 Eq. (3)-(5) 与 Fig. 7 的 `delta` 扫描：
+首个完整 MVP 是 `kobayashi1993_dendrite`，覆盖 Eq. (3)-(5) 与 Fig. 7 的五组各向异性扫描：
 
 ```text
 delta = 0, 0.005, 0.01, 0.02, 0.05
@@ -251,20 +245,70 @@ tfinal = 1.4
 comparison times = 0.2, 0.8, 1.4
 ```
 
-12 项 required 验收包括：
+### 工作流一页图
 
-- final MPH 非空；
-- COMSOL 日志无 fatal error；
-- phase field 上下界；
-- 焓守恒；
-- 网格、时间步和 seed 敏感性；
-- 各向异性增强尖端生长；
-- 四重方向性；
-- Fig. 7 IoU 和 normalized Chamfer。
+```text
+论文证据
+  → IR
+  → 人工批准
+  → build-only Java
+  → built MPH
+  → 实现审计
+  → solve-only 参数扫描
+  → 全参数导出
+  → 网格/时间步/初始半径敏感性
+  → 12 项验收
+  → qualified verdict
+  → 离线 report.html
+```
 
-论文未提供 random seed 和 nucleation radius，因此 profile 将这些补全明确标记为 assumption。最终 verdict 预期为 `qualified`，而不是无条件的 `supported`。
+### PaperSim 实际执行了什么
 
-旧 `kobayashi1993.mph`、旧图表和旧报告已迁移为 legacy artifact，只作为历史证据，不构成新 `iter001` 的独立验收。
+| 阶段 | 输入 | PaperSim 门禁 | 输出 |
+|---|---|---|---|
+| Case 与 IR | 论文、证据、profile | PDF 哈希、页码、bbox、单位、符号和证据完整性 | `iter001_ir.json` |
+| 批准 | 审计后的 IR | 绑定 paper/profile/IR/audit 哈希 | 批准记录 |
+| Build | 批准 IR | 控制方程/本构关系分离、单次 sweep、build-only | `iter001_build.java`、`iter001_built.mph` |
+| 实现审计 | built MPH | 参数、变量、物理、边界、初值、网格、solver 读回 | `iter001_snapshot.json`、审计记录 |
+| Solve | built MPH | 独立 solve-only 作业，执行 Study 和参数扫描 | `iter001_solved.mph`、导出数据 |
+| 数值审计 | global/fields CSV、日志、敏感性结果 | 终点、守恒、边界、收敛、趋势、Fig. 7 | 12 项 required checks |
+| Assess | 数值审计结果 | 假设、缺口和失败项 | `qualified` |
+| Report | 全部审计记录 | 离线 HTML、无 CDN/MathJax | `report.html` |
+
+### 实际结果
+
+```text
+state = assessed
+verdict = qualified
+required acceptance = 12/12 PASS
+numerical checks = 15/15 PASS
+```
+
+| Metric | Actual | Rule | Result |
+|---|---:|---:|---|
+| Phase minimum | `-3.644014e-6` | `>= -0.05` | PASS |
+| Phase maximum | `1.000001797` | `<= 1.05` | PASS |
+| Enthalpy drift | `1.96206e-13` | `<= 0.01` | PASS |
+| Mesh tip difference | `0.00353607` | `<= 0.05` | PASS |
+| Time-step tip difference | `0.0` | `<= 0.05` | PASS |
+| Initial-radius tip range | `0.00211416` | `<= 0.15` | PASS |
+| Tip ratio `delta=.05 / delta=0` | `1.85093` | `> 1.02` | PASS |
+| Fourfold directionality | `2.01351` | `> 1.10` | PASS |
+| Fig. 7 mean IoU | `0.328294` | `>= 0.25` | PASS |
+| Fig. 7 normalized Chamfer | `0.0262006` | `<= 0.10` | PASS |
+
+![Kobayashi 1993 Fig. 7: paper versus COMSOL](docs/mvp/kobayashi1993/assets/fig7/fig7_paper_vs_comsol.png)
+
+论文没有给出随机种子和初始形核半径，因此 profile 将这些补全明确标记为 assumption。最终 verdict 是 `qualified`，不是无条件的 `supported`。旧 MPH、旧图表和旧报告只作为 legacy artifact，不构成新 `iter001` 的独立验收。
+
+### 阅读完整案例
+
+- [MVP 总览与工作流](https://aoyang17.github.io/PaperSim/mvp/kobayashi1993/)
+- [Paper 到 IR](https://aoyang17.github.io/PaperSim/mvp/kobayashi1993/paper-to-ir/)
+- [IR 到 COMSOL 与实现审计](https://aoyang17.github.io/PaperSim/mvp/kobayashi1993/ir-to-comsol/)
+- [求解、敏感性、Fig. 7 与 verdict](https://aoyang17.github.io/PaperSim/mvp/kobayashi1993/solve-and-audit/)
+- [完整复现步骤](https://aoyang17.github.io/PaperSim/mvp/kobayashi1993/reproduce/)
+- [外部 Solver 接口](https://aoyang17.github.io/PaperSim/reference/external-solver/)
 
 ## 测试
 
@@ -307,11 +351,38 @@ python3 -m pytest -m comsol
 - PDE/ODE 必须声明 dependent-variable 和 flux/source 单位；
 - Build 和 Solve 必须是不同源码和不同作业。
 
-连接信息、凭据、分区和远端路径只存在于外部配置，不进入 profile、IR、Java 或报告。
+连接信息、凭据、分区和远端路径只存在于用户自己的 external solver adapter，不进入 profile、IR、Java 或报告。
+
+## 外部 Solver 接口
+
+PaperSim 库不定义任何具体集群、网关、账号、实例 ID、PEM、分区或远端路径。核心只提供两类接口：
+
+- `SolverBackend`：`validate/build/submit/status/collect` 的求解器契约；
+- `RemoteExecutor`：用户自定义外部执行器的 `run/upload/download/describe` 契约。
+
+`ComsolBackend` 接收用户注入的 `RemoteExecutor`，不读取连接 profile。`Engine.run()` 也不会根据 `"comsol"` 自动构造 backend，必须由调用方显式注册：
+
+```python
+solver = MyExternalComsolSolver(...)
+engine = Engine.open(workspace, solvers={"comsol": solver})
+run = engine.run(model_id, backend="comsol")
+```
+
+Yeesuan 网关、SSH/SCP、Slurm、真实主机和本地配置只作为 MVP 样例放在：
+
+```text
+examples/mvp/yeesuan_comsol/
+```
+
+该目录不参与 `papersim` 包安装，可整体替换或删除，不影响 Case、IR、实现审计和数值验收逻辑。安装示例所需的可选远程依赖：
+
+```bash
+python3 -m pip install -e '.[remote]'
+```
 
 ## 公开仓库安全边界
 
-`PaperSim` 不在仓库内保存主机名、账号、密码、私钥、实例 ID、分区或远端绝对路径。这些信息必须通过外部 mode-`0600` 配置文件注入。`.gitignore` 会排除本地虚拟环境、构建产物、MPH、日志、CSV、密钥和凭据文件。
+`PaperSim` 不在库代码中保存主机名、账号、密码、私钥、实例 ID、分区或远端绝对路径。这些信息必须通过用户自己的 mode-`0600` 本地配置和 executor 注入。`.gitignore` 会排除本地虚拟环境、构建产物、MPH、日志、CSV、密钥和凭据文件。
 
 
 ## Gallery: Huang 2013 Figure Reproduction
