@@ -18,8 +18,8 @@ build-only 代码不能调用 `runAll()`，也不能保存 solved MPH。这样�
 
 实际生成代码：
 
-- [`iter001_build.java`](assets/code/iter001_build.java)
-- [`iter001_solve.java`](assets/code/iter001_solve.java)
+- [`iter001_build.java`](https://github.com/aoyang17/PaperSim/blob/main/docs/mvp/kobayashi1993/assets/code/iter001_build.java)
+- [`iter001_solve.java`](https://github.com/aoyang17/PaperSim/blob/main/docs/mvp/kobayashi1993/assets/code/iter001_solve.java)
 
 ## 2. 从 IR 到 COMSOL 的映射
 

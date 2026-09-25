@@ -77,7 +77,7 @@ IR 提取会检查：
 
 读取实际 IR：
 
-[`iter001_ir.json`](assets/data/iter001_ir.json)
+[`iter001_ir.json`](https://github.com/aoyang17/PaperSim/blob/main/docs/mvp/kobayashi1993/assets/data/iter001_ir.json)
 
 ## 5. 批准门禁
 

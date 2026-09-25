@@ -49,10 +49,10 @@ PaperSim 没有把这个结果直接算作通过，而是：
 
 实际数据：
 
-- [`iter001_global_all.csv`](assets/data/iter001_global_all.csv)
-- [`metrics.json`](assets/data/metrics.json)
-- [`job_status.json`](assets/data/job_status.json)
-- [`remote_hashes.json`](assets/data/remote_hashes.json)
+- [`iter001_global_all.csv`](https://github.com/aoyang17/PaperSim/blob/main/docs/mvp/kobayashi1993/assets/data/iter001_global_all.csv)
+- [`metrics.json`](https://github.com/aoyang17/PaperSim/blob/main/docs/mvp/kobayashi1993/assets/data/metrics.json)
+- [`job_status.json`](https://github.com/aoyang17/PaperSim/blob/main/docs/mvp/kobayashi1993/assets/data/job_status.json)
+- [`remote_hashes.json`](https://github.com/aoyang17/PaperSim/blob/main/docs/mvp/kobayashi1993/assets/data/remote_hashes.json)
 
 ## 3. 独立敏感性工况
 
